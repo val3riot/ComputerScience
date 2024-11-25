@@ -1,0 +1,401 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+%Italian-specific commands
+%--------------------------------------
+\usepackage[italian]{babel}
+%Hyphenation rules
+%--------------------------------------
+\usepackage{listings}
+\usepackage{graphicx} %package to manage images
+\usepackage{imakeidx}
+\title{Basi di dati}
+\author{Valerio Tolli}
+\date{January 2024}
+
+\begin{document}
+
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+\section{Capitolo 4: SQL}
+
+\subsection{SQL - Structured Query Language}
+SQL è unlinguaggio con varie funzionalità: Contiene sia il DDL che il DML.
+Nel 1974 fu proposto il linguaggio SEQUWL divenuto SQL/DS nel 1981. 
+\subsection{Definizione dei dati in SQL}
+L'istruzione CREATE TABLE definisce uno schema di relazione e ne crea un'istanza vuota, specifica attributi, domini e vincoli.
+\begin{center}
+    
+   \begin{lstlisting}[language=SQL]
+    CREATE TABLE Impiegato(
+    Matricola CHAR(6) PRIMARY KEY,
+    Nome CHAR(20) NOT NULL,
+    Cognome CHAR(20) NOT NULL,
+    Dipart CHAR(15),
+    Stipendio NUMERIC(9) DEFAULT 0,
+    FOREIGN KEY(Dipart) REFERENCES
+    Dipartimento(NomeDip),
+    UNIQUE (Cognome,Nome)
+    ) 
+        
+    \end{lstlisting} 
+\end{center}
+
+\subsection{Domini}
+Di seguiti i domini elementari (predefiniti):
+\begin{itemize}
+    \item Carattere: singoli caratteri o stringhe, anche di lunghezza variabile;
+    \item Numerici: esatti e approssimati;
+    \item Data, ora, intervalli di tempo
+    \item Boolean
+    \item BLOB, CLOB (binary/character large object): per grandi immagini e testi
+    
+\end{itemize}
+
+Un utente può creare dei domini attraverso l'istruzione CREATE DOMAIN che definisce un dominio (semplice), utilizzabile in definizioni di relazioni, anche con vincoli e valori di default.
+
+\begin{center}
+    
+   \begin{lstlisting}[language=SQL]
+     CREATE DOMAIN Voto
+    AS SMALLINT DEFAULT NULL
+    CHECK ( value >=18 AND value <= 30 )
+        
+    \end{lstlisting} 
+\end{center}
+
+\subsection{Vincoli intrarelazionali}
+I vincoli intrarelazionali sono i seguenti:
+\begin{itemize}
+    \item NOT NULL
+    \item UNIQUE
+    \item PRIMARY KEY: chiave primaria (può essere una sola, implica NOT NULL; DB2 non rispetta lo standard)
+    \item CHECK
+    
+\end{itemize}
+UNIQUE e PRIMARY KEY hanno due forme: si possono definire nella definiione di un attributo se forma da solo la chiave o come elemento separato
+
+\begin{center}
+    
+   \begin{lstlisting}[language=SQL]
+        CREATE TABLE Impiegato(
+        Matricola CHAR(6) PRIMARY KEY,
+        Nome CHAR(20) NOT NULL,
+        Cognome CHAR(20) NOT NULL,
+        Dipart CHAR(15),
+        Stipendio NUMERIC(9) DEFAULT 0,
+        FOREIGN KEY(Dipart) REFERENCES
+        Dipartimento(NomeDip),
+        UNIQUE (Cognome,Nome)
+        )      
+    /* 
+        oppure si possono definire come segue
+           Matricola CHAR(6),
+           ...,
+       PRIMARY KEY (Matricola)
+
+       
+        mentre per UNIQUE non vale questo tipo di equivalenza
+        Nome CHAR(20) NOT NULL,
+        Cognome CHAR(20) NOT NULL,
+        UNIQUE (Cognome,Nome),
+        Nome CHAR(20) NOT NULL UNIQUE,
+        Cognome CHAR(20) NOT NULL UNIQUE, 
+       */ 
+    \end{lstlisting} 
+\end{center}
+
+
+REFERENCES e FOREIGN KEY permettono di definire vincoli di
+integrità referenziale: anche loro hanno due sintassi per singoli e più attributi. È possibile definire politiche di reazione alla violazione
+
+\begin{center}
+    
+   \begin{lstlisting}[language=SQL]
+    CREATE TABLE Infrazioni(
+    Codice CHAR(6) NOT NULL PRIMARY KEY,
+    Data DATE NOT NULL,
+    Vigile INTEGER NOT NULL
+    REFERENCES Vigili(Matricola),
+    Provincia CHAR(2),
+    Numero CHAR(6) ,
+    FOREIGN KEY(Provincia, Numero)
+    REFERENCES Auto(Provincia, Numero)
+    )
+    \end{lstlisting} 
+\end{center}
+
+Si possono effettuare modifiche agli schemi attraverso i seguenti comandi: ALTER DOMAIN, ALTER TABLE, DROP DOMAIN, DROP TABLE.
+\subsection{Definizione degli indici}
+La definizione degli indici è rilevante dal punto di vista delle prestazioni, ma è a livello fisico e non logico. In passato era importante perchè in alcuni sistemi era l'unico mezzo per definire chiavi. Si usa il comando CREATE INDEX.
+
+\subsection{SQL, operazioni sui dati}
+Per effettuare un interrogazione usiamo SELECT, per le modifiche usiamo INSERT, DELETE e UPDATE.
+
+\subsubsection{SELECT}
+La SELECT è composta dalle seguenti clausole:
+\begin{itemize}
+    \item SELECT (chiamata target list)
+    \item FROM (tabella)
+    \item WHERE condizione (facoltativa)
+\end{itemize}
+La select può effettuare proiezioni e selezioni. SELECT * effettua delle selezioni senza proiezioni, SELECT FIELD1, FIELD2 effettua delle proiezioni senza proiezioni. Di seguito una SELECT con selezione e proiezione:   
+\[PROJ_{Nome, Reddito}(SELEt_{a<30}(Persone))\]
+\begin{center}
+\centering
+    \begin{lstlisting}
+    select Nome, Reddito
+    from Persone
+    where Eta < 30
+        
+    \end{lstlisting}
+\end{center}
+\subsubsection{WHERE}
+Nella WHERE è possibile effettuare espressioni del tipo NOME = 'MARIO' per filtrare la lista che ritorniamo. La condizione LIJE consente di effettuare delle ricerche più specifiche, del tipo:
+\begin{center}
+\centering
+    \begin{lstlisting}
+    ### seleziona le persone che hanno un nome che inizia per 'A' e ha una 'd' come terza lettera
+    select *
+    from Persone
+    where Nome like 'A_d%'
+        
+    \end{lstlisting}
+\end{center}
+Per la gestione dei valori NULL si usa il comando 'IS' o 'NOT'.
+
+\subsection{JOIN}
+Per realizzare delle query si possono o aggiungere più relazioni nella FROM o usare il comando JOIN TABLE\_NAME on [RELAZIONE].
+ESEMPIO:
+\[PROJ_{A1,A4} (SEL_{A2=A3} (R1 JOIN R2))\]
+\begin{center}
+\centering
+    \begin{lstlisting}
+    ###R1(A1,A2) R2(A3,A4) 
+    select R1.A1, R2.A4
+    from R1, R2
+    where R1.A2 = R2.A3
+        
+    \end{lstlisting}
+\end{center}
+
+Le espressioni SQL sono dichiarative e noi ne stiamo vedendo la semantica.
+In pratica, i DBMS eseguono le operazioni in modo
+efficiente, ad esempio:Eseguono le selezioni al più presto e ae possibile, eseguono join e non prodotti cartesiani.
+La capacità dei DBMS di "ottimizzare" le interrogazioni, rende (di solito) non necessario preoccuparsi dell'efficienza quando si specifica un'interrogazione.
+È perciò più importante preoccuparsi della chiarezza (anche perché così è più difficile sbagliare...)
+Ecco come usare le JOIN:
+\begin{center}
+\centering
+    \begin{lstlisting}
+    select f.Nome, f.Reddito, p.Reddito
+    from (Persone p join Paternita on p.Nome = Padre)
+    join Persone f on Figlio = f.Nome
+    where f.Reddito > p.Reddito
+
+     select f.Nome, f.Reddito, p.Reddito
+    from Persone p, Paternita, Persone f
+    where p.Nome = Padre and
+    Figlio = f.Nome and
+    f.Reddito > p.Reddito
+    \end{lstlisting}
+\end{center}
+Oltre al comando JOIN si possono usare: RIGHT JOIN, LEFT JOIN, LEFT OUTER JOIN, FULL OUTER JOIN.
+\subsection{Ordinamento del risultato}
+Si possono ordinare i risultati usando il comando order by [CAMPO1, CAMPO2, ...] [ASC, DESC]. 
+\subsection{Unione, intersezione e differenza}
+La select da sola non permette di fare unioni; serve un costrutto esplicito:
+\begin{center}
+\centering
+    \begin{lstlisting}
+        select ...
+        union [all]
+        select ...
+    \end{lstlisting}
+\end{center}
+I duplicati vengono eliminati (a meno che si usi all); anche dalle proiezioni!
+ESEMPIO:
+\begin{center}
+\centering
+    \begin{lstlisting}[language=SQL]
+        select padre, figlio
+        from paternita
+        union
+        select figlio, madre
+        from maternita
+    \end{lstlisting}
+\end{center}
+La differenza si può esprimere con select nidificate o con il comando 'except'.
+L'intersezione si può effettuare con il comando intersect o effettuando delle JOIN sulla stessa tabella tra i campi da intersecare.
+Le condizioni atomiche permettono anche il confronto fra un attributo (o più) e il risultato di una sottointerrogazione e permettono le quantificazioni esistenziali.
+Esempio, ottenere il nome e reddito del padre di Franco
+\begin{center}
+\centering
+    \begin{lstlisting}[language=SQL]
+        select Nome, Reddito
+        from Persone, Paternita
+        where Nome = Padre and Figlio = 'Franco'
+        ###FORMA NIDIFICATA
+        select Nome, Reddito
+        from Persone
+        where Nome = ( select Padre
+        from Paternita
+        where Figlio = 'Franco')
+    \end{lstlisting}
+\end{center}
+La forma nidificata è “meno dichiarativa”, ma talvolta più leggibile (richiede meno variabili). La forma piana e quella nidificata possono essere combinate. Le sottointerrogazioni non possono contenere operatori insiemistici (“l’unione si fa solo al livello esterno”); la limitazione non è significativa.
+La prima versione di SQL prevedeva solo la forma nidificata (o strutturata), con una sola relazione in ogni clausola FROM insoddisfacente: la dichiaratività era limitata o non si possono includere nella target list attributi di relazioni nei blocchi interni.
+Ci sono delle regole di visibilità per l'interrogazioni nidificate: non è possibile fare riferimenti a variabili definite in blocchi più interni; se un nome di variabile è omesso, si assume riferimento alla variabile più vicina.
+In un blocco si può fare riferimento a variabili definite in blocchi più esterni; la semantica base (prodotto cartesiano, selezione, proiezione) non funziona più.
+Con le forma nidificate si può usare un'altra operazione: EXISTS.
+
+ESEMPIO:
+\begin{center}
+\centering
+    \begin{lstlisting}[language=SQL]
+         select *
+        from Persone
+        where exists ( select *
+        from Paternita
+        where Padre = Nome) or
+        exists ( select *
+        from Maternita
+        where Madre = Nome)
+    \end{lstlisting}
+\end{center}
+\subsection{Operatori aggregati}
+Nelle espressioni della target list possiamo avere anche espressioni che calcolano valori a partire da insiemi di ennuple:
+\begin{itemize}
+    \item conteggio, minimo, massimo, media, totale;
+    \item Sintassi base (semplificata): Funzione ([DISTINCT] *) o Funzione ([DISTINCT] ATTRIUTO)
+\end{itemize}
+Ecco alcuni operatori:
+\begin{itemize}
+    \item Count([ATTRIBUTI]) conta il numero di attributi, è possibile usare anche la distinct Count(distinct [ATTRIBUTI]).
+    \item SUM, AVG, MAX, MIN
+\end{itemize}
+Questi operatori possono essere affiancati alla clausola GROUP BY, in modo da poter generare risultati più complessi.
+ESEMPIO:
+\begin{center}
+    \begin{lstlisting}[language=SQL]
+        ### numero di figli di ciasacun padre
+        select Padre, count(*) AS NumFigli
+        from Paternita
+        group by Padre
+    \end{lstlisting}
+\end{center}
+L'operatore di raggruppamento va utilizzato per ogni attributo nella select ad eccezione degli operatori aggregati:
+ESEMPIO:
+\begin{center}
+    \begin{lstlisting}[language=SQL]
+         select padre, avg(f.reddito), p.reddito
+        from persone f join paternita on figlio = f.nome join
+        persone p on padre =p.nome
+        group by padre, p.reddito
+    \end{lstlisting}
+\end{center}
+Ci sono altre condizioni che si possono voler applicare ai gruppi, per fa ciò si usa HAVING
+ESEMPIO:
+\begin{center}
+    \begin{lstlisting}[language=SQL]
+        select padre, avg(f.reddito)
+        from persone f join paternita on figlio = nome
+        where eta < 30
+        group by padre
+        having avg(f.reddito) > 20
+    \end{lstlisting}
+\end{center}
+\subsection{Operazioni di aggiornamento}
+Le operazioni di insert, delete e update di una o più ennuple di una relazione possono essere effettuate sulla base di una condizione che può coinvolgere anche altre relazioni.
+\begin{center}
+    \begin{lstlisting}[language=SQL]
+        /* INSERT 
+        INSERT INTO Tabella [ ( Attributi )]
+        SELECT ...
+        */
+        INSERT INTO Persone ( Nome )
+        SELECT Padre
+        FROM Paternita
+        WHERE Padre NOT IN (SELECT Nome
+        FROM Persone)
+        /* DELETE
+        DELETE FROM Tabella
+        [ WHERE Condizione ]
+        */
+        DELETE FROM Paternita
+        WHERE Figlio NOT in ( SELECT Nome
+        FROM Persone)
+        /* UPDATE
+        UPDATE NomeTabella
+        SET Attributo = < Espressione |
+        SELECT ... |
+        NULL |
+        DEFAULT >
+        [ WHERE Condizione ]
+        */
+        UPDATE Persone
+        SET Reddito = Reddito * 1.1
+        WHERE Eta < 30
+    \end{lstlisting}
+\end{center}
+Per quanto riguarda l'inserimento:
+\begin{itemize}
+    \item l'ordinamento degli attributi (se presente) e dei valori è significativo. 
+    \item Le due liste debbono avere lo stesso numero di elementi.
+    \item Se la lista di attributi è omessa, si fa riferimento a tutti gli attributi della relazione, secondo l’ordine con cui sono stati definiti.
+    \item Se la lista di attributi non contiene tutti gli attributi della relazione, per gli altri viene inserito un valore nullo (che deve essere
+    permesso) o un valore di default.
+\end{itemize}
+Per quanto riguarda l'eliminazione:
+\begin{itemize}
+    \item Elimina le ennuple che soddisfano la condizione.
+    \item Può causare (se i vincoli di integrità referenziale sono definiti con
+politiche di reazione cascade) eliminazioni da altre relazioni.
+    \item Ricordare: se la where viene omessa, si intende where true
+\end{itemize}
+%Capitolo 9: Normalizzazione start
+\section{Capitolo 9: Normalizzazione}
+In genere ogni tupla in una relazione dovrebbe rappresentare un'entità o un'istanza di relazione. Gli attributi di diverse entità non dovrebbero essere mescolati nella stessa relazione.
+
+\noindent Per riferirsi ad altre entità dovrebbero essere usate solo le chiavi esterne, e gli attirbuti di entità diverse e di relazioni diverse dovrebbero essere tenuti il più possibile separati.
+
+\noindent Si dovrebbe progettare uno schema che possa essere spiegato facilmente relazione per relazione con la semantica degli attributi facile da interpretare. Mischiare attributi di più entità può causare problemi perchè le informazioni vengono memorizzate in modo rindondante sprecando spazio di archiviazione e potrebbero verificarsi anomalie di inserimento, eliminazione o modifica.
+
+\noindent Bisognerebbe progettare uno schema con il minor numero di anomalie di inserimento, cancellazione e aggiornamento. Se sono presenti, annotarle in modo che le applicazioni possano tenerne conto. Le relazioni dovrebbero essere progettate in modo tale che le loro tuple abbiano il minor numero possibile di valori NULL. 
+
+\noindent Gli attributi che sono spesso NULL potrebbero essere collocati in relazioni separate. I motivi per i valori nulli possono essere:
+\begin{itemize}
+    \item Attributo non applicabile o non valido.
+    \item Attributo valore sconosciuto.
+    \item Valore noto per esistere, ma non disponibile.
+\end{itemize}
+\noindent Un progetto non corretto per un database relazione può causare risultati errati per alcune operazioni JOIN. La proprietà lossless join viene utilizzata per garantire risultati significativi per le operazioni di join.
+
+\noindent Le relazioni dovrebbero essere progettate per soddisfare la condizione di lossless join. Non si dovrebbero creare tuple spurie facendo un natural-join di tutte le relazioni. 
+
+\noindent La normalizzazione è un procedimento utile per l'eliminazione della ridondanza delle informazioni e per ridurre il rischio di inconsistenza della base dati. Di fatto riduce la dimensione delle relazioni a partire da relazioni con concetti tra loro indipendenti. 
+%dipendenze funzionali start
+\subsection{Dipendenze Funzionali} 
+La dipendenza funzionale (FD) si tratta di un particolare vincoli di integrità per il modello relazionale che descrive legami di tipo funzionale tra gli attributi di una relazione. 
+
+\noindent Le FD e le chiavi sono usati per definire le forme normali per le relazioni. Le FD sono vincoli che derivano dal significato e dalle interrelazioni degli attributi dei dati. Un insieme di attributi X determina funzionalmente un insieme di attributi Y se il valore di X determina un valore univoco per Y. 
+
+\noindent Si ha una dipendenza funzionale tra attributi quando il valore di un insieme di attributi A determina un singolo valore dell'attributo B e si indica con A $\rightarrow$B. Si dice che B dipende da A o che A è un determinante per B.
+
+\noindent Se un attributo è una chiave candidata di una relazione allora è un determinante di ogni attributo della relazione e viceversa, un attributo che determina tutti gli altri attributi è una chiave candidata. Si ha dipendenza transitiva quando A determina B e B determina C. Allora si dice che C dipende transitivamente da A.
+
+\noindent Un FD è una proprietà degli attributi nello schema R. Il vincolo deve valere su ogni istanza della relazione r(R). Se K è una chiave di R, allora K determina funzionalmente tutti gli attributi in R (poiché non abbiamo mai due tuple distinte con $t_1[K]=t_2[K]$).
+%dipendenze funzionali end
+%Forma normale di Boyce e Codd start
+\subsection{Forma normale di Boyce e Codd}
+L'idea è introdurre delle proprietà, dette forme normali, definite in riferimento alle dipendenze funzionali, che sono soddisfatte quando non ci sono anomalie. Le anomalie e le ridondanze sono causate dalle dipendenze funzionali $X\rightarrow A$ che permettono la presenza di più tuple fra loro uguali sugli attributi in X, ovvero le dipendenze funzionali $X\rightarrow A$ tali che X non contiene una chiave.
+
+\noindent Una relazione in forma normale di Boyce e Codd se per ogni dipendenza funzionale (non banale) $X\rightarrow A$ definita su di essa, X contiene una chiave K di r, cioè X è una superchiave per r.
+
+\noindent Data una relazione che non soddisfa la forma normale di Boyce e Codd è possibila decomporla in due o più relazioni normalizzate attraverso un processo detto normalizzazione. Questo processo si fonda su un criterio: se una relazione rappresenta più concetti indipendenti, allora va decomposta in relazioni più piccole, una per ogni concetto. 
+
+%Forma normale di Boyce e Codd end
+
+%Capitolo 9: Normalizzazione end
+\end{document}
