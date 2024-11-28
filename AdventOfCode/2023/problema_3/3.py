@@ -1,6 +1,13 @@
-
-def isSpecial(string):
-    return string and string in r'!"£$%&/()=\'^@:,;-_#°§+*\[\]\{\}<>'
+text_1='''467..114..
+...*......
+..35..633.
+......#...
+617*......
+.....+.58.
+..592.....
+......755.
+...$.*....
+.664.598..'''
 text ='''........................................................862...........20.............453...619......58........694...312.................292.
 ...846................132.49........308..........................=............50.....*..............*........+.....+...............59.......
 ........../46....140.......*............735......852&..706.....860...............297.459..........998................661..418.883.......+...
@@ -141,51 +148,105 @@ text ='''........................................................862...........2
 .............../...943......................590...*....145....414*969..............896....*.........622.........*.938.........=.............
 ....@...#184.935.............................*.....71......$................84*.........825.....637...*.......528...*......990..............
 ..745...............534..............58....901...........974...................637.....................87..........361......................'''
+def isSpecial(string):
+    return string and string in r'!"£$%&/()=\'^@:,;-_#°§+*\[\]\{\}<>'
+def findNumber(pos, riga):
+    r=l=''
+    for i in range(pos+1,len(riga)):
+        if(not riga[i].isdigit()):
+            break
+        else:
+            r+=riga[i]
+    for i in range(pos-1,-1,-1):
+        if(not riga[i].isdigit()):
+            break
+        else:
+            l+=riga[i]
+    return l[::-1]+riga[pos]+r
+        
+def count(matrice):
+    counter=i=j=0
+    for i in range(len(matrice)):
+        riga = matrice[i]
+        j=0
+        while j <len(riga):
+            test=False
+            if(riga[j].isdigit()): 
+                tt=None   
+                for js in range(j,len(riga)):
+                    if not riga[js].isdigit():
+                        tt=js
+                        break
+                if(not tt):
+                    tt=len(riga)
+                numero=''.join(riga[j:tt])
+                for jt in range (j,js):
+                    if((
+                        i>0 and (
+                        (jt>0 and isSpecial(matrice[i-1][jt-1]))or
+                        isSpecial(matrice[i-1][jt]) or
+                        (jt<len(matrice[i-1])-1 and isSpecial(matrice[i-1][jt+1]))
+                        )
+                        ) or
+                        (
+                        i<len(matrice)-1 and (
+                        (jt>0 and isSpecial(matrice[i+1][jt-1]))or
+                        isSpecial(matrice[i+1][jt]) or
+                        (jt<len(matrice[i+1])-1 and isSpecial(matrice[i+1][jt+1]))
+                        )
+                        ) or
+                        (
+                            (jt>0 and isSpecial(riga[jt-1])) or
+                            (jt<len(riga)-1 and isSpecial(riga[jt+1]))
+                        )
+                        ):
+                        test=True
+                j=tt
+                if(test and numero.isdigit()):
+                    counter+=int(numero)
+            else:
+                j+=1
+    return counter
+def starAdjacent(matrice):
+    counter = 0
+    for i in range(len(matrice)):
+        riga = matrice[i]
+        j=0
+        while j <len(riga):
+            numbers=[]
+            if(riga[j] == '*'): 
+                if(j>0 and riga[j-1].isdigit()):
+                    numbers.append(findNumber(j-1,riga))
+                if(j<len(riga)-1 and riga[j+1].isdigit()):
+                    numbers.append(findNumber(j+1,riga))
+                if(i>0 and matrice[i-1][j-1].isdigit()):
+                    numbers.append(findNumber(j-1,matrice[i-1]))
+                elif(i>0 and matrice[i-1][j].isdigit()):
+                    numbers.append(findNumber(j,matrice[i-1]))
+                if(i>0 and not matrice[i-1][j].isdigit() and matrice[i-1][j+1].isdigit()):
+                    numbers.append(findNumber(j+1,matrice[i-1]))
+                if(i<len(matrice)-1 and matrice[i+1][j-1].isdigit()):
+                    numbers.append(findNumber(j-1,matrice[i+1]))
+                elif(i<len(matrice)-1 and matrice[i+1][j].isdigit()):
+                    numbers.append(findNumber(j,matrice[i+1]))    
+                if(i<len(matrice)-1 and not matrice[i+1][j].isdigit() and matrice[i+1][j+1].isdigit()):
+                    numbers.append(findNumber(j+1,matrice[i+1]))                       
+            val = 1
+            if len(numbers)>1:
+                for n in numbers:
+                    val *=int(n)    
+                counter+=val
+            j+=1
+    return counter
+
+
 matrice=[]
 for r in text.split('\n'):
     matrice.append(list(r))
-i=j=0
-counter =0
-for i in range(len(matrice)):
-    riga = matrice[i]
-    j=0
-    while j <len(riga):
-        test=False
-        if(riga[j].isdigit()): 
-            tt=None   
-            for js in range(j,len(riga)):
-                if not riga[js].isdigit():
-                    tt=js
-                    break
-            if(not tt):
-                tt=len(riga)
-            numero=''.join(riga[j:tt])
-            for jt in range (j,js):
-                if((
-                    i>0 and (
-                    (jt>0 and isSpecial(matrice[i-1][jt-1]))or
-                    isSpecial(matrice[i-1][jt]) or
-                    (jt<len(matrice[i-1])-1 and isSpecial(matrice[i-1][jt+1]))
-                    )
-                    ) or
-                    (
-                    i<len(matrice)-1 and (
-                    (jt>0 and isSpecial(matrice[i+1][jt-1]))or
-                    isSpecial(matrice[i+1][jt]) or
-                    (jt<len(matrice[i+1])-1 and isSpecial(matrice[i+1][jt+1]))
-                    )
-                    ) or
-                    (
-                        (jt>0 and isSpecial(riga[jt-1])) or
-                        (jt<len(riga)-1 and isSpecial(riga[jt+1]))
-                    )
-                    ):
-                    test=True
-            j=tt
-            if(test and numero.isdigit()):
-                counter+=int(numero)
-        else:
-            j+=1
-print(counter)
+#counter_1 = count(matrice)
+#print(counter_1)
+counter_2=starAdjacent(matrice)
+print(counter_2)
+
 
     
