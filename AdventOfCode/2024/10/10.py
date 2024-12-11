@@ -47,7 +47,7 @@ for r in range(0,len(matrice)):
     for c in range(0,len(row)):
         if row[c] == 0:
             '''pt1
-                        visited = find_trailhead(matrice,r,c)
+            visited = find_trailhead(matrice,r,c)
             count+=len(visited)
             '''
             '''pt2'''
