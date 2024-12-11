@@ -1,5 +1,4 @@
-import sys
-sys.setrecursionlimit(2000000) 
+
 temp_L={}
 def calcola(el):
     s = str(el)
@@ -17,11 +16,16 @@ def it_list(el,t):
     elif el == 0:
         out= it_list(1,t-1)
     elif len(str(el))%2==0:
-        l,r=calcola(el)
+        if el in temp_L:
+            l,r=temp_L[el]
+        else:
+            l,r=calcola(el)
         out= it_list(l,t-1) + it_list(r,t-1)
     else:
-        temp_L[el]=[el*2024]
-        out= it_list(temp_L[el][0],t-1)
+        if el not in temp_L:
+            temp_L[el]=[el*2024]
+        v=temp_L[el]
+        out= it_list(v[0],t-1)
     temp_S[(el,t)]=out
     return out
 
