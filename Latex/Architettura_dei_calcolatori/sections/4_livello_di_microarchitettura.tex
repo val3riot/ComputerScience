@@ -1,0 +1,89 @@
+%Livello di microarchitettura start
+\section{Livello di microarchitettura}
+ Al di sopra del livello logico digitale si trova il livello di microarchitettura incaricato di implementare il livello ISA (Instruction Set Architecture, “architettura dell'insieme di istruzioni”). Il modo in cui viene progettato il livello di microarchitettura non dipende solamente dall'ISA che si intende implementare, ma anche dagli obiettivi di costi e prestazioni del calcolatore. Molti ISA moderni sono costituiti da istruzioni semplici (principalmente RISC) che generalmente è possibile eseguire in un unico ciclo di clock. Nel caso di ISA più complessi (CISC) l'esecuzione di una singola istruzione può invece richiedere più cicli.
+%Esempio di microarchitetture start
+\subsection{Esempio di microarchitettura}
+Non esistono principi generali validi per ogni progetto: ogni ISA (Instruction Set Architecture) rappresenta un caso a sé. Verrà analizzato un sottoinsieme della Java Virtual Machine che gestisce solo numeri interi, denominato IJVM.\newline
+Iniziamo descrivendo la microarchitettura sopra la quale implementeremo IJVM:
+\begin{itemize}
+    \item \textbf{Il Microprogramma come Interprete:} conterrà un microprogramma il cui compito sarà quello di prelevare, decodificare ed eseguire le istruzioni IJVM. A differenza dell'interprete JVM standard (scritto in C per portabilità), questo microprogramma è progettato per pilotare in modo efficiente i singoli gate hardware (porte logiche).
+    \item \textbf{Modello di Progettazione Logica:} Il design della microarchitettura può essere approcciato come un problema di programmazione, in cui ogni istruzione del livello ISA è vista come una funzione chiamata da un programma principale.
+    \item \textbf{Il Ciclo di Controllo Principale:} Il motore del sistema è un ciclo infinito, spesso chiamato ciclo fetch-decode-execute. Questo ciclo determina quale funzione invocare, la esegue e ricomincia da capo.
+    \item \textbf{Stato del Calcolatore:} Il microprogramma opera su un insieme di variabili che costituiscono lo "stato" della macchina. Un esempio fondamentale di variabile di stato è il Program Counter (PC), che indica la locazione di memoria contenente la successiva istruzione ISA da eseguire.
+    \item \textbf{Struttura delle Istruzioni ISA:} Le istruzioni IJVM interpretate dalla microarchitettura sono composte da un opcode (codice operativo), che identifica l'azione (come una ADD o un salto), e talvolta da un operando, che specifica i dati su cui agire (ad esempio, quale variabile locale utilizzare).
+    \item \textbf{Controllo per Ciclo di Clock:} Ogni singola microistruzione all'interno del microprogramma ha il compito di assumere il controllo del percorso dati per la durata di un unico ciclo di clock.
+\end{itemize}
+%Percorso Dati start
+\subsubsection{Percorso Dati}
+Il percorso dati contiene una serie di registra a 32 bit, identificati da nomi simbolici (come PC, SP, MDR, MAR, H). È fondamentale notare che questi registri sono accessibili solo a livello di microarchitettura dal microprogramma.
+\begin{itemize}
+    \item \textbf{Bus B:} La maggior parte dei registri può immettere il proprio contenuto sul bus B, che alimenta l'ingresso destro dell'ALU.
+    \item \textbf{Registro H (Holding):} Questo registro alimenta l'ingresso sinistro (A) dell'ALU. H può essere caricato solo dal bus C e serve a mantenere il primo operando mentre il secondo viene prelevato dal bus B.
+    \item \textbf{Bus C:} Riceve il risultato dall'ALU (dopo il passaggio nello shifter) e lo distribuisce ai registri; il valore sul bus C può essere scritto in uno o più registri contemporaneamente al termine del ciclo.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/data_path_microarchitettura.jpg}
+    \caption{Percorso dati della microarchitettura utilizzata per l'esempio di questo capitolo}
+    \label{fig:data_path_microarchitettura}
+\end{figure}
+L'ALU esegue operazioni aritmetiche e logiche regolate da 6 linee di controllo:
+\begin{itemize}
+    \item \textbf{F0, F1:} Determinano il tipo di operazione.
+    \item \textbf{ENA, ENB:} Abilitano individualmente gli ingressi A e B.
+    \item \textbf{INVA:} Inverte l'ingresso sinistro.
+    \item \textbf{INC:} Forza un riporto nel bit meno significativo, permettendo operazioni come B + 1.
+\end{itemize}
+All'uscita dell'ALU si trova lo \textbf{shifter}, che può traslare il valore prima di immetterlo sul bus C. Supporta due operazioni principali: SLL8 (Shift Left Logical), che sposta a sinistra di 1 byte (8 bit) inserendo zeri, e SRA1 (Shift Right Arithmetic), che sposta a destra di 1 bit preservando il bit di segno.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/useful_combination_ALU_signals.jpg}
+    \caption{Segnali di Controllo in ingrasso alla ALU e corrispondenti funzioni.}
+    \label{fig:useful_combination_ALU_signals}
+\end{figure}
+Un aspetto cruciale è la capacità di leggere e scrivere lo stesso registro in un unico ciclo (es. $SP = SP + 1$). Questo è possibile perché le operazioni avvengono in momenti diversi del ciclo di clock:
+\begin{enumerate}
+    \item \textbf{$\Delta w$:} All'inizio del ciclo (fronte di discesa), si impostano i segnali di controllo per guidare il percorso dati.
+    \item \textbf{$\Delta x$:} Il registro selezionato carica il suo valore sul bus B.
+    \item \textbf{$\Delta y$:} L'ALU e lo shifter operano sui dati stabili.
+    \item \textbf{$\Delta z$:} Il risultato si propaga lungo il bus C verso i registri in cui possono essere caricati in corrispondenza del fronte di salita dell'impulso successivo.
+    \item \textbf{Fine Ciclo:} Sul fronte di salita del clock, i risultati vengono salvati nei registri di destinazione. Grazie ai ritardi di propagazione finiti, il nuovo valore non raggiunge l'ALU in tempo per alterare il calcolo dello stesso ciclo.
+\end{enumerate}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/diagramma_temporale_ciclo_data_path.jpg}
+    \caption{Temporizzazione di un ciclo di clock del percorso dati}
+    \label{fig:diagramma_temporale_ciclo_data_path}
+\end{figure}
+La microarchitettura comunica con la memoria attraverso due porte distinte:
+\begin{itemize}
+    \item \textbf{Porta a 32 bit (Parole):} Controllata dai registri MAR (Memory Address Register) e MDR (Memory Data Register). MAR contiene indirizzi espressi in parole (0, 1, 2...), ma viene mappato sul bus indirizzi fisico in modo che l'indirizzo 1 corrisponda al byte 4, il 2 al byte 8, e così via.
+    \item \textbf{Porta a 8 bit (Byte):} Controllata dal registro PC, che legge un singolo byte nel registro MBR. Questa porta è di sola lettura e viene usata per prelevare il flusso di istruzioni ISA.
+    \item \textbf{MBR (Memory Buffer Register):} Può essere immesso sul bus B in due modalità: MBRU (unsigned), dove il byte è esteso con 24 zeri, o MBR (signed), dove viene effettuata l'estensione del segno.
+\end{itemize}
+Le operazioni di memoria seguono una temporizzazione precisa per garantire la stabilità dei dati:
+\begin{itemize}
+    \item \textbf{Latenza di un ciclo:} Si assume che la memoria impieghi un solo ciclo per operare (ipotizzando un tasso di successo della cache L1 del 100%).
+    \item \textbf{Disponibilità dei dati:} Se un'operazione di lettura viene avviata alla fine del ciclo k, i dati saranno pronti nel registro (MBR o MDR) alla fine del ciclo k+1. Ciò significa che non possono essere utilizzati nel ciclo immediatamente successivo, ma solo nel ciclo k+2 o più tardi.
+    \item \textbf{Contemporaneità:} Entrambe le porte (32 bit e 8 bit) possono operare simultaneamente. Tuttavia, tentare di leggere e scrivere lo stesso byte nello stesso istante produce risultati indefiniti.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/corrispondenza_bit_MAR_indirizzo.jpg}
+    \caption{Corrispondenza tra i bit di MAR e i bit di indirizzo}
+    \label{fig:corrisponda_bit_MAR_indirizzo}
+\end{figure}
+%Percorso Dati end
+%Microistruzioni start
+\subsubsection{Microistruzioni}
+Per gestire le operazioni del percorso dati, sono necessari 29 segnali di controllo. Questi segnali sono suddivisi in cinque gruppi funzionali che operano durante un unico ciclo di clock:
+\begin{itemize}
+    \item \textbf{9 segnali per il Bus C:} Controllano la scrittura dei dati dal bus C nei registri (come PC, SP, MDR)
+    \item \textbf{9 segnali per il Bus B:} Controllano quale registro deve immettere il proprio contenuto sul bus B per alimentare l'ingresso destro della ALU.
+    \item \textbf{8 segnali per ALU e Shifter:} Determinano la specifica operazione aritmetico-logica e l'eventuale scorrimento (SLL8 o SRA1) del risultato.
+    \item \textbf{2 segnali per MAR/MDR:} Indicano operazioni di lettura o scrittura della memoria tramite questi registri.
+    \item \textbf{2 segnali per MAR/MDR:} Indica il prelievo (fetch) di un byte dalla memoria verso il registro MBR.
+\end{itemize}
+%Microistruzioni end
+%Esempio di microarchitetture end
+%Livello di microarchitettura end

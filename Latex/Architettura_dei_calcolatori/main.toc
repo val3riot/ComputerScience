@@ -1,0 +1,99 @@
+\babel@toc {italian}{}\relax 
+\babel@toc {italian}{}\relax 
+\contentsline {section}{\numberline {1}Introduzione}{4}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Approccio Strutturale}{4}{subsection.1.1}%
+\contentsline {subsubsection}{\numberline {1.1.1}Linguaggi, livelli e macchine virtuali}{4}{subsubsection.1.1.1}%
+\contentsline {subsubsection}{\numberline {1.1.2}Attuali macchine multilivello}{4}{subsubsection.1.1.2}%
+\contentsline {subsubsection}{\numberline {1.1.3}Evoluzione delle macchine multilivello}{5}{subsubsection.1.1.3}%
+\contentsline {subsubsection}{\numberline {1.1.4}Invenzione della microprogrammazione}{5}{subsubsection.1.1.4}%
+\contentsline {subsubsection}{\numberline {1.1.5}Invenzione del sistema operativo}{5}{subsubsection.1.1.5}%
+\contentsline {subsubsection}{\numberline {1.1.6}Migrazione delle funzionalità verso il microcodice}{5}{subsubsection.1.1.6}%
+\contentsline {subsubsection}{\numberline {1.1.7}Eliminazione della microprogrammazione}{5}{subsubsection.1.1.7}%
+\contentsline {subsection}{\numberline {1.2}Pietre miliari nell'architettura dei computer}{5}{subsection.1.2}%
+\contentsline {subsubsection}{\numberline {1.2.1}Generazione 0 - Computer meccanici 1942-1945}{5}{subsubsection.1.2.1}%
+\contentsline {subsubsection}{\numberline {1.2.2}Generazione 1 - Valvole termoioniche 1945-1955}{6}{subsubsection.1.2.2}%
+\contentsline {subsubsection}{\numberline {1.2.3}Generazione 2 - Transistor 1955-1965}{6}{subsubsection.1.2.3}%
+\contentsline {subsubsection}{\numberline {1.2.4}Generazione 3 - Circuiti integrati 1955-1980}{6}{subsubsection.1.2.4}%
+\contentsline {subsubsection}{\numberline {1.2.5}Generazione 4 - Integrazione a grandissima scala 1980-??}{7}{subsubsection.1.2.5}%
+\contentsline {subsubsection}{\numberline {1.2.6}Generazione 5 - Computer a basso consumo e computer invisibili}{7}{subsubsection.1.2.6}%
+\contentsline {subsection}{\numberline {1.3}Tipologie di computer}{7}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}Esempi di famiglie di computer}{8}{subsection.1.4}%
+\contentsline {subsubsection}{\numberline {1.4.1}Introduzione all'architettura x86}{8}{subsubsection.1.4.1}%
+\contentsline {subsubsection}{\numberline {1.4.2}Introduzione all'architettura ARM}{8}{subsubsection.1.4.2}%
+\contentsline {subsubsection}{\numberline {1.4.3}Introduzione all'architettura AVR}{8}{subsubsection.1.4.3}%
+\contentsline {subsection}{\numberline {1.5}Unità metriche}{9}{subsection.1.5}%
+\contentsline {section}{\numberline {2}Organizzazione dei sistemi di calcolo}{10}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Processi}{10}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}Organizzazione della CPU}{10}{subsubsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.2}Esecuzione dell'istruzione}{10}{subsubsection.2.1.2}%
+\contentsline {subsubsection}{\numberline {2.1.3}RISC contro CISC}{11}{subsubsection.2.1.3}%
+\contentsline {subsubsection}{\numberline {2.1.4}Principi di progettazione dei calcolatori moderni}{11}{subsubsection.2.1.4}%
+\contentsline {subsubsection}{\numberline {2.1.5}Parallelismo a livello d'istruzione}{12}{subsubsection.2.1.5}%
+\contentsline {subsubsection}{\numberline {2.1.6}Parallelismo a livello di processore}{12}{subsubsection.2.1.6}%
+\contentsline {subsection}{\numberline {2.2}Memoria Principale}{13}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}Bit}{13}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}Indirizzi di memoria}{13}{subsubsection.2.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.3}Ordinamento dei byte}{14}{subsubsection.2.2.3}%
+\contentsline {subsubsection}{\numberline {2.2.4}Codice correttori}{14}{subsubsection.2.2.4}%
+\contentsline {subsubsection}{\numberline {2.2.5}Memoria cache}{16}{subsubsection.2.2.5}%
+\contentsline {subsubsection}{\numberline {2.2.6}Tipi di memorie}{16}{subsubsection.2.2.6}%
+\contentsline {subsection}{\numberline {2.3}Memoria Secondaria}{17}{subsection.2.3}%
+\contentsline {subsubsection}{\numberline {2.3.1}Gerarchie di memoria}{17}{subsubsection.2.3.1}%
+\contentsline {subsubsection}{\numberline {2.3.2}Dischi magnetici}{17}{subsubsection.2.3.2}%
+\contentsline {subsubsection}{\numberline {2.3.3}Dischi IDE}{18}{subsubsection.2.3.3}%
+\contentsline {subsubsection}{\numberline {2.3.4}Dischi SCSI}{18}{subsubsection.2.3.4}%
+\contentsline {subsubsection}{\numberline {2.3.5}Raid}{18}{subsubsection.2.3.5}%
+\contentsline {subsubsection}{\numberline {2.3.6}Dischi a stato solido}{19}{subsubsection.2.3.6}%
+\contentsline {subsubsection}{\numberline {2.3.7}CD-ROM}{20}{subsubsection.2.3.7}%
+\contentsline {subsubsection}{\numberline {2.3.8}CD-Riscrivibili e CD-Registrabili}{20}{subsubsection.2.3.8}%
+\contentsline {subsubsection}{\numberline {2.3.9}DVD e Blu-ray}{21}{subsubsection.2.3.9}%
+\contentsline {subsection}{\numberline {2.4}Input/Output}{21}{subsection.2.4}%
+\contentsline {subsubsection}{\numberline {2.4.1}Bus}{21}{subsubsection.2.4.1}%
+\contentsline {subsubsection}{\numberline {2.4.2}Terminali}{22}{subsubsection.2.4.2}%
+\contentsline {subsubsection}{\numberline {2.4.3}Mouse}{22}{subsubsection.2.4.3}%
+\contentsline {subsubsection}{\numberline {2.4.4}Controller di Gioco}{22}{subsubsection.2.4.4}%
+\contentsline {subsubsection}{\numberline {2.4.5}Stampanti}{23}{subsubsection.2.4.5}%
+\contentsline {subsubsection}{\numberline {2.4.6}Apparecchiature per Telecomunicazioni}{23}{subsubsection.2.4.6}%
+\contentsline {subsubsection}{\numberline {2.4.7}Codici di Caratteri}{24}{subsubsection.2.4.7}%
+\contentsline {section}{\numberline {3}Livello Logico Digitale}{26}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Porte Logiche e algebra di Boole}{26}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}Porte logiche}{26}{subsubsection.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.1.2}Algebra di Boole}{27}{subsubsection.3.1.2}%
+\contentsline {subsubsection}{\numberline {3.1.3}Implementazione delle funzioni booleane}{28}{subsubsection.3.1.3}%
+\contentsline {subsubsection}{\numberline {3.1.4}Equivalenza di circuiti}{29}{subsubsection.3.1.4}%
+\contentsline {subsection}{\numberline {3.2}Circuiti logici digitali elementari}{30}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Circuiti integrati (IC)}{30}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Circuiti combinatori}{30}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.3}Circuiti per l'aritmetica}{32}{subsubsection.3.2.3}%
+\contentsline {subsubsection}{\numberline {3.2.4}Clock}{35}{subsubsection.3.2.4}%
+\contentsline {subsection}{\numberline {3.3}Memoria}{35}{subsection.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.1}Latch}{36}{subsubsection.3.3.1}%
+\contentsline {subsubsection}{\numberline {3.3.2}Flip-Flops}{37}{subsubsection.3.3.2}%
+\contentsline {subsubsection}{\numberline {3.3.3}Registri}{38}{subsubsection.3.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.4}Organizzazione della memoria}{39}{subsubsection.3.3.4}%
+\contentsline {subsubsection}{\numberline {3.3.5}Chip di memoria}{41}{subsubsection.3.3.5}%
+\contentsline {subsubsection}{\numberline {3.3.6}RAM e ROM}{42}{subsubsection.3.3.6}%
+\contentsline {subsection}{\numberline {3.4}Chip della CPU e bus}{42}{subsection.3.4}%
+\contentsline {subsubsection}{\numberline {3.4.1}Chip della CPU}{43}{subsubsection.3.4.1}%
+\contentsline {subsubsection}{\numberline {3.4.2}Bus del calcolatore}{44}{subsubsection.3.4.2}%
+\contentsline {subsubsection}{\numberline {3.4.3}Ampiezza del bus}{45}{subsubsection.3.4.3}%
+\contentsline {subsubsection}{\numberline {3.4.4}Temporizzazione del bus}{45}{subsubsection.3.4.4}%
+\contentsline {subsubsection}{\numberline {3.4.5}Arbitraggio del bus}{47}{subsubsection.3.4.5}%
+\contentsline {subsubsection}{\numberline {3.4.6}Operazioni del bus}{48}{subsubsection.3.4.6}%
+\contentsline {subsection}{\numberline {3.5}Esempi di CPU}{49}{subsection.3.5}%
+\contentsline {subsubsection}{\numberline {3.5.1}Pentium 4}{49}{subsubsection.3.5.1}%
+\contentsline {subsubsection}{\numberline {3.5.2}Intel Core i7}{50}{subsubsection.3.5.2}%
+\contentsline {subsubsection}{\numberline {3.5.3}UltraSPARC III}{52}{subsubsection.3.5.3}%
+\contentsline {subsubsection}{\numberline {3.5.4}Chip 8051}{53}{subsubsection.3.5.4}%
+\contentsline {subsection}{\numberline {3.6}Esempi di BUS}{54}{subsection.3.6}%
+\contentsline {subsubsection}{\numberline {3.6.1}Il Bus ISA (Industry Standard Architecture)}{54}{subsubsection.3.6.1}%
+\contentsline {subsubsection}{\numberline {3.6.2}Il Bus PCI (Peripheral Component Interconnect)}{54}{subsubsection.3.6.2}%
+\contentsline {subsubsection}{\numberline {3.6.3}PCI Express (PCIe)}{54}{subsubsection.3.6.3}%
+\contentsline {subsubsection}{\numberline {3.6.4}USB (Universal Serial Bus)}{54}{subsubsection.3.6.4}%
+\contentsline {subsection}{\numberline {3.7}Interfacce}{55}{subsection.3.7}%
+\contentsline {subsubsection}{\numberline {3.7.1}Le Interfacce I/O: Il caso del chip PIO}{55}{subsubsection.3.7.1}%
+\contentsline {subsubsection}{\numberline {3.7.2}La Decodifica dell'Indirizzo}{55}{subsubsection.3.7.2}%
+\contentsline {section}{\numberline {4}Livello di microarchitettura}{56}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Esempio di microarchitettura}{56}{subsection.4.1}%
+\contentsline {subsubsection}{\numberline {4.1.1}Percorso Dati}{56}{subsubsection.4.1.1}%
+\contentsline {subsubsection}{\numberline {4.1.2}Microistruzioni}{59}{subsubsection.4.1.2}%

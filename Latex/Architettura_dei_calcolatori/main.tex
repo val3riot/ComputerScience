@@ -1,0 +1,42 @@
+\documentclass{article}
+% Packages start
+\usepackage{graphicx} 
+\usepackage[italian]{babel}
+\usepackage{algorithm2e}
+\usepackage{amsthm}
+\usepackage{algpseudocode}
+\usepackage{float}
+\usepackage{graphicx} %package to manage images
+\usepackage{imakeidx}
+\usepackage{amsmath}
+\usepackage{microtype}   % Per ottimizzare il testo
+\usepackage{hyperref}    % Per gestire gli URL
+\usepackage[a4paper, left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm]{geometry}
+% Packages end
+%document data def start
+\title{Riassunto Architettura dei calcolatori}
+\author{Valerio Tolli}
+\date{April 2025}
+%document data def end
+%theorem def start
+\newtheorem{theorem}{Theorem}[subsection]
+\newtheorem{lemma}{Lemma}[subsection]
+%theorem def end
+%document begin
+\begin{document}
+%indice start
+\maketitle
+\newpage
+\tableofcontents
+%indice end
+%Sections start
+\newpage
+\input{sections/1_introduzione}
+\newpage
+\input{sections/2_organizzazione_dei_sistemi_di_calcolo}
+\newpage
+\input{sections/3_livello_logico_digitale}
+\newpage
+\input{sections/4_livello_di_microarchitettura.tex}
+\end{document}
+%document end

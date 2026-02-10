@@ -1,0 +1,450 @@
+%Organizzazione dei sistemi di calcolo start
+\section{Organizzazione dei sistemi di calcolo}
+Un calcolatore digitale è un sistema in cui processori, memorie e dispositivi periferici sono connessi tra loro.
+%Processi start
+\subsection{Processi}
+La CPU (Central Processing Unit) è il cervello del computer e la sua funzione è quella di eseguire i programmi contenuti nella memoria principale prelevando le loro istruzioni, eseminandole ed eseguendole una dopo l'altra. I componenti sono connessi fra di loro mediante un bus. La CPU contiene un unità di controllo e un unità aritmetico-logica. Oltre a queste contiene una piccola memoria costituita da un certo numero di registri. Il registro più importante è il contatore d'istruzioni o Program Counter (PC), che punta alla successiva istruzione che dovrà essere eseguita. Un altro registro è il registro istruzione corrente, o Instruction Register (IR), contenente l'istruzione che si trova in fase di esecuzione.
+%Organizzazione della CPU start
+\subsubsection{Organizzazione della CPU}
+Il data path di una CPU di Von Neumann è tipicamente composta da dei registra da 1 a 32 bit; una ALU (Arithmectic Logic Unit) e da alcuni bus che connettono fra loro le diverse parti. I registri alimentano due registri di input della ALU mentre questa è occupata nell'esecuzione di alcune computazioni (addizioni/sottrazioni su input, il risultato viene memorizzato nei registri o copiato in memoria in un secondo momemnto).\newline
+La maggior parte delle istruzioni può essere divisa in:
+\begin{itemize}
+    \item Registro-memoria (necessita di una fase di caricamento delle parole della memoria nei registri): permettono di prelevare parole di memoria per portarle all'interno dei registri (o viceversa), dove sono utilizzabili, per esempio, come input della ALU per effettuare istruzioni successive. 
+    \item Registro-registro (gli operandi sono già pronti nei registri): preleva due operandi dai registri, li porta all'interno dei registri di input della ALU, esegue su di loro una qualche operazione e ne memorizza il risultato in uno dei registri. 
+\end{itemize}
+Il processo che consiste nel portare i due operandi attraverso la ALU e nel memorizzare il risultato è chiamato ciclo del percorso dati.
+%Organizzazione della CPU end
+%Esecuzione dell'istruzione start
+\subsubsection{Esecuzione dell'istruzione}
+I passi per l'esecuzione di ogni istruzione della CPU generalmente può essere riassunta con il seguente \textbf{ciclo esecutivo delle istruzioni} (o \textbf{ciclo di prelievo-decodifica-esecuzione}):
+\begin{enumerate}
+    \item Prelevare la successiva istruzione dalla memoria per portarla nell'IR;
+    \item Modificare il PC per farlo puntare all'istruzione seguente;
+    \item Determinare il tipo dell'istruzione appena prelevata;
+    \item Se l'istruzione usa una parola in memoria, determinare dove si trova;
+    \item Se necessario, prelevare la parola per portarla in un registro della CPU;
+    \item Eseguire l'istruzione;
+    \item Torna al punto 1 per iniziare l'esecuzione dell'istruzione successiva.
+\end{enumerate}
+Questo ciclo può anche essere tradotto ed eseguito da programmi che prelevano, esaminano ed eseguono le proprie istruzioni, detti \textbf{interpreti}.\newline
+Nel passato gli interpreti erano favoriti per via delle \textbf{memorie di controllo} che erano usate per memorizzare l'interprete. In questo modo le microistruzioni, ovvero le istruzioni che l'interprete usava per eseguire un'istruzione del programma da interpretare, impiegavano pochi millisecondi in più rispetto a quanto impiega il programma principale. Senza le memorie di controllo si impiegava circa 6 volte il tempo impiegato con la memori di controllo.
+%Esecuzione dell'istruzione end
+%RISC contro CISC start
+\subsubsection{RISC contro CISC}
+Negli anni '80 si progettarono alcune CPU che non utilizzavano l'interpretazione. Ci sono varie strategie di progettazione:
+\begin{itemize}
+    \item RISC (Reduced Instruction Set Computer): si base su poche istruzioni semplici, la cui esecuzione possa essere completata velocemente (un solo ciclo di clock idealmente). I vantaggi sono: maggiore velocità per ciclo di clock, Consumo energetico più basso. Gli svantaggi sono: codice macchina più lungo (più istruzioni per fare la stessa cosa), Richiede compilatori più intelligenti.
+    \item CISC (Complex Instruction Set Computer): si basa su molte istruzioni complesse: anche centinaia, con operazioni ad alto livello (es. "moltiplica e somma"). Una singola istruzione può compiere operazioni multiple (es. accesso memoria + calcolo). Microcodice interno che traduce le istruzioni complesse in micro-operazioni più semplici. I vantaggi sono programmi più compatti e una buona compatibilità con linguaggi ad alto livello. Gli svantaggi sono: Hardware più complesso, esecuzione più lenta per via della decodifica complessa.
+    \item  Ibrido: a partire dal x486, le CPU intel contengono un sottoinsieme di istruzioni RISC (quelle più comuni) che possono essere eseguite in un singolo ciclo nel datapath, mentre le altre complesse sono interpretate secondo la classica modalità CISC.
+\end{itemize}
+%RISC contro CISC end
+%Principi di progettazione dei calcolatori moderni start
+\subsubsection{Principi di progettazione dei calcolatori moderni}
+Esiste un insieme di principi di progettazione, talvolta chiamati principi di progettazione RISC, che i progettisti cercano di seguire il più possibile (salvo vincoli esterni):
+\begin{itemize}
+    \item \textbf{Tutte le istruzioni sono eseguite direttamente dall'hardware:} Le istruzioni non devono essere interpretate. Per le architettura CISC, quelle istruzioni più complesse (e più rare) possono essere suddivise in parti ed eseguite, successivamente, come sequenze di microistruzioni.
+    \item \textbf{Massimizzare la frequenza di emissione delle istruzioni:} Il parallelismo gioca un ruolo essenziale nelle prestazioni di un computer. Infatti è possibile emettere un gran numero di lente istruzioni in un breve intervallo di tempo solo se si riescono a eseguire più istruzioni allo stesso tempo.
+    \item \textbf{Le istruzioni devono essere facili da decodificare:} Un limite critico sulla frequenza di emissione delle istruzioni è dato dal processo di decodifica, che deve essere effettuato per ogni singola istruzione allo scopo di determinare le risorse necessarie. Bisogna rendere le istruzioni regolari, di lunghezza fissa e con pochi campi. Meno formati di istruzioni ci sono, meglio è.
+    \item \textbf{Solo le istruzioni Load e Store fanno riferimento alla memoria:} L'operazione di spostamento degli operandi dalla memoria ai registri può essere compiuta separatamente mediante apposite istruzioni. Dato che l'accesso alla memoria può richiedere un tempo considerevole, queste operazioni possono essere efficientemente sovrapposte all'esecuzione di altre istruzioni. Tale osservazione porta alla conclusione che soltanto le istruzioni LOAD e STORE dovrebbero far riferimento alla memoria, mentre tutte le altre dovrebbero operare esclusivamente sui registri.
+    \item \textbf{Molti registri disponibili:} Dato che l'accesso alla memoria è relativamente lento occorre prevedere molti registri (almeno 32) di modo che, una volta prelevata la parola, possa essere mantenuta nel registro fintanto sia necessario. È particolarmente inefficiente trovarsi senza registri liberi, in quanto obbliga a scaricare in memoria tutti i valori dei registri per poi ricaricarli.
+\end{itemize}
+Poiché l'incremento del clock del processore ha raggiunto un limite fisico, i progettisti di CPU guardano al parallelismo (più istruzioni nello stesso tempo) per incrementare le prestazioni.
+Il parallelismo si può ottenere in due diversi modi:
+\begin{itemize}
+    \item \textbf{Parallelismo a livello di istruzione:} il parallelismo è sfruttato all'interno delle istruzioni per ottenere un maggior numero di istruzioni al secondo;
+    \item \textbf{Parallelismo a livello di processore:} più CPU collaborano per risolvere lo stesso problema.
+\end{itemize}
+%Principi di progettazione dei calcolatori moderni end
+%Parallelismo a livello d'istruzione start
+\subsubsection{Parallelismo a livello d'istruzione}
+\begin{itemize}
+    \item \textbf{Pipeline:} Il collo di bottiglia della velocità di esecuzione delle istruzioni è rappresentato dal prelievo delle istruzioni dalla memoria. In passato, per alleviare questo problema, le istruzioni venivano prelevate in anticipo e inserite in dei registri, chiamati buffer di prefetch, dove venivano memorizzate le istruzioni le quali potevano essere prelevate senza dover attendere una lettura della memoria.
+    In pratica la tecnica di prefetching divide l'esecuzione dell'istruzione in due parti: il prelievo dell'istruzione e la sua esecuzione effettiva.\newline
+    Il pipeline divide l'esecuzione di un'istruzione in un numero maggiore di parti che possono essere eseguite in parallelo; ciascuna di queste parti è gestita da componenti hardware dedicati. Un seguito un esempio di pipeline a cinque stadi\ref{fig:pipeline_a_5_stadi}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\linewidth]{images/pipeline_5_stadi.png}
+        \caption{Pipeline a 5 stadi}
+        \label{fig:pipeline_a_5_stadi}
+    \end{figure}
+    L'uso della pipeline permette di bilanciare la latenza (il tempo che un'istruzione impiega per essere elaborata) e la larghezza di banda del processore (i MIPS, Milion Instrutcion per second, della CPU). Più nello specifico: con un ciclo di clock di T ns e una pipeline a n stadi, la latenza è di nT ns, poiché ogni istruzione attraversa n stadi, ognuno dei quali richiede T ns.
+    Dato che ogni ciclo di clock viene eseguita un istruzione e che ci sono $10^9/T$ cicli di clock, vengono eseguite $10^9/T$ istruzioni al secondo (se T=2 500 milioni di istruzioni al secondo.
+    \item \textbf{Processori con più pipeline:} Nel caso di processori con più pipeline, è presente una singola unità di fetch che preleva due istruzioni alla volta e le inserisce nelle pipeline, ognuna della quali dotata di ALU. Per poter eseguire le istruzioni in parallelo non devono esserci conflitti che devono essere gestiti o eliminati durante l'esecuzione per mezzo di componenti hardware. Intel sviluppo il processore 486 che aveva due pipeline; la prima, pipeline u, poteva eseguire una qualsiasi istruzione Pentium. La seconda, pipeline v, poteva invece eseguire solamente semplici istruzioni su interi. Erano presenti regole che limitavano l'esecuzione di istruzioni in parallelo nel caso di istruzioni non semplici o incompatibili.
+    \item \textbf{Architettura superscalare:} Invece di avere due pipeline duplicate, per risparmiare sui componenti da duplicare, intel per prima adottò una singola pipeline con più unità funzionali in corrispondenza di alcuni stadi. Per renderlo ottimale è necessario che la velocità di emissione dello stadio precedente a quello duplicato sia superiore, in questo modo lo stadio successivo puà eseguire in parallelo più istruzioni.
+\end{itemize}
+%Parallelismo a livello d'istruzione end
+%Parallelismo a livello di processore start
+\subsubsection{Parallelismo a livello di processore}
+Il parallelismo a livello di processore può aumentare le prestazioni di un fattore  50, 100 o più, cosa che il parallelismo a livello d'istruzione riesce a malapena ad arrivare a un fattore di 5 o 10.
+Esistono tre approcci:
+\begin{itemize}
+    \item Computer con parallelismo sui dati: ci sono fondamentalmente due approcci:
+    \begin{enumerate}
+        \item Procesori SIMD (Single Instruction Multiple Datastream): consiste in un elevato numero di processori identici che eseguono la stessa sequenza d'istruzioni su insiemi diversi di dati. Le moderne GPU si affidano in larga misura all'elaboraziione SIMD per offrire grande potenza di calcolo con pochi transistor (poiché la maggior parte degli algoritmi sono regolari con operazioni ripetute su pixel, vertici, ecc).
+        \item Processori Vettoriali: eseguono in modo molto efficiente una stessa sequenza di operazioni su coppie di dati, anche se, a differenza dei processori SIMD, tutte le operazioni di addizione sono eseguite da un unico sommatore strutturato in pipeline.   
+    \end{enumerate}
+    Entrambi lavorano su array di dati, ma mentre il SIMD sfrutta sommatori quanti sono gli elementi dei  vettori, il processore vettoriale usa un registro vettoriale che consiste in un insieme di registri convenzionali caricati in memoria in una singola istruzione. Questo fa si che quando si fa una somma tra vettori viene fuori un vettore che può essere memorizzato in un registro vettoriale o utilizzato direttamente come operando.
+    \item Multiprocessori: è un sistema composto da più CPU complete con memoria in comune. Poiché ciascuna CPU può leggere o scrivere qualsiasi zona della memoria comune, le CPU devono sincronizzarsi via software.
+    In questo caso le CPU hanno la necessità di interagire in modo così profondo che il sistema è detto fortemente accoppiato (tightly coupled). L'approccio più semplice è avere un singolo bus con più cpu, tutte connesse in un'unica memoria. Per ridurre la contesa della memoria, ogni processore è dotato di una memoria locale che non è accessibile agli altri. Questa è usata per mantenere il codice del programma e quei dati che non devono essere condivisi. Questa memoria non utilizza il bus principale.
+    \item Multiprocessori con molte CPU sono difficili da realizzare, per via del problema delle connessioni di ciascuna CPU verso la memoria comune.
+    I progettisti hanno superato il problema abbandonando il concetto di memoria comune e realizzando un elevato numero di CPU interconnesse, ciascuna con la propria memoria privata.
+    Le CPU in un multicomputer sono accoppiate in modo lasco (loosely coupled) e comunicano attraverso scambi di messaggi.
+    In architetture grandi la completa interconnessione non è fattibile così sono utilizzate topologie differenti come la griglia, l’albero o l’anello.
+\end{itemize}
+%Parallelismo a livello di processore end
+%Processi end
+%Memoria Principale start
+\subsection{Memoria Principale}
+La memoria è quella parte del calcolatore in grado di memorizzare i programmi e i dati.
+%bit start
+\subsubsection{Bit}
+L'unità di base della memoria è la cifra binaria, i bit. Il bit può assumere valori 0 e 1. I bit sono efficienti poiché i valori digitali possono essere memorizzati usando la tensione (acceso / spento). Un computer ragiona unicamente interpretando gruppi di bit, cioè comandi rappresentati da sequenze di “zero” e “uno”. 8 bit rappresentano 1 byte.
+Il BCD (Binary Code Decimal) è un codice utilizzato da alcuni sistemi di calcolo, come i grandi mainframe IBM, per rappresentare i numeri decimali.  
+\begin{itemize}
+    \item Scopo: Il BCD è un codice che permette a certi computer di utilizzare un'aritmetica sia decimale che binaria.
+    \item Codifica: Il BCD utilizza 4 bit per memorizzare una singola cifra decimale.
+    \item Capacità: Poiché 4 bit possono fornire 24=16 combinazioni, nel sistema BCD vengono utilizzate le 10 combinazioni per rappresentare le cifre decimali da 0 a 9. Le restanti sei combinazioni non vengono utilizzate.
+\end{itemize}
+Il BCD è poco efficiente rispetto al binario poiché 16 bit in BCD possono memorizzare solo 10.000 combinazioni (0 a 9999), mentre in binario puro possono memorizzare 65.536 combinazioni diverse (216)
+%bit end
+%Indirizzi di memoria start
+\subsubsection{Indirizzi di memoria}
+Le memorie sono costituite da un certo numero di celle (o locazioni) ciascuna delle quali può memorizzare informazioni. Ciascuna cella ha un numero, chiamato indirizzo, attraverso il quale il programma può riferirsi ad essa. Se una memoria ha n celle i suoi indirizzi andranno da 0 a n-1. Tutte le celle contengono lo stesso numero di bit; se una cella è costituita da k bit, essa può contenere una qualsiasi delle $2^k$ combinazioni di bit. I calcolatori che usano un sistema binario esprimono gli indirizzi di memoria in notazione binaria; se un indirizzo ha m bit, il massimo numero di celle indirizzabili è $2^m$. Lo standard impone che la dimensione di una cella sia di 8 bit = 1 byte. I byte sono raggruppati in parole (word) la cui lunghezza varia a seconda dell'architettura del computer (ad esempio, una parola da 32 bit contiene 4 byte). La lunghezza della parola è significativa poiché la maggior parte delle istruzioni opera su intere parole, ad esempio, sommando due parole intere
+%Indirizzi di memoria end
+%Ordinamento dei byte start
+\subsubsection{Ordinamento dei byte}
+L'ordinamento dei byte si riferisce al modo in cui un intero multi-byte viene memorizzato (l'ordine in cui sono posizionati i byte di ordine superiore e inferiore all'interno della parola). Esistono due principali schemi di endianness: big-endian (da destra a sinistra) e little-endian (da sinistra e destra). Questa differenza può creare problemi di compatibilità (il "problema della referenza in avanti") quando i dati devono essere trasferiti tra macchine con endianness diverse. Per superare questo problema, è necessario che il software inverta l'ordine dei byte durante il trasferimento.
+%Ordinamento dei byte end
+%Codici correttori start
+\subsubsection{Codice correttori}
+Occasionalmente le memorie dei calcolatori possono commettere degli errori per via di picchi di tensione sulle linee di alimentazione o per altre cause. Per proteggersi da tali errori, alcune memorie utilizzano dei codici di rilevazione e/o di correzione degli errori. Quando si impiegano questi codici vengono aggiunti dei bit extra a ogni parola di memoria secondo una modalità particolare. Quando una parola viene letta dalla memoria, si controllano questi bit aggiuntivi per vedere se si è verificato un errore.\newline
+Supponiamo che una parola di memoria consista di m bit di dati ai quali aggiungiamo r bit di controllo; sia quindi n = m + r la lunghezza totale. Un'unità di n bit contenente m bit di dati e r bit di controllo è spesso chiamata \textbf{parola di codice (codeword)} a n bit.\newline
+Date due parole di codice, diciamo 10001001 e 10110001, è possibile determinare il numero di bit corrispondenti rispetto ai quali differiscono. In questo caso la differenza è di 3 bit. Per determinare il numero di bit diversi, bisogna semplicemente calcolare l'\textbf{OR ESCLUSIVO (XOR)} tra i bit delle due parole e contare quanti bit valgono 1 nel risultato; questo valore è chiamato \textbf{distanza di Hamming}. Il suo significato principale è che, se fra due parole di codice vi è una distanza di Hamming pari a d allora saranno necessari d errori singoli per trasformare una parola nell'altra.\newline
+Gli r bit di controllo devono essere in grado di indicare se la parola è corretta o se c'è un errore in uno degli m bit della parola. Tra le $2^n$ combinazioni della codeword solo $2^m$ saranno valide (le combinazioni della parola di memoria a m bit). Quindi se dovesse uscire una delle $2^n-2^m$ combinazioni non valide il calcolatore saprà che è avvenuto un errore. L'algoritmo che calcola i bit di controllo, ci fornisce la lista completa delle parole di codice lecite, da cui è possibile calcolare la distanza di hamming minima, la distanza di hamming dell'intero codice.\newline
+Tutto dipende dalla distanza di hamming: per \textbf{rilevare} d errori singoli è necessaria una parola con distanza d+1, in questo modo non esiste alcun modo in cui d errori singoli possano cambiare una parola valida in un'altra parola di codice valida; per \textbf{correggere} d errori singoli è necessario un codice con distanza 2d+1; questa distanza assicura che le parole codice valide siano sufficientemente distanti tra loro, in modo che anche con d cambiamenti di bit, il codice originale rimanga il più vicino alla parola ricevuta e possa essere univocamente determinato.\newline
+Ad esempio, aggiungendo un singolo \textbf{bit di parità} ad una parola in modo tale che il numero di 1 presenti sia sempre pari, il calcolatore può facilmente capire se c'è un errore verificando se il numero di 1 è pari o dispari. Un codice di questo tipo ha distanza di Hamming 2, dato che ogni errore singolo genera una parola di codice la cui parità è errata. Per passare da una parola di codice valida ad un'altra servono 2 errori singoli, il programma non riesce a correggere l'errore.\newline
+Ipotizziamo di voler progettare un codice con m bit di dati e r di controllo capace di correggere tutti gli errori singoli, sia n=m+r. Ogni parola codice valida di lunghezza n (ovvero $2^m$ parole totali) ha n parole illegali che si trovano a una distanza di Hamming pari a 1 da essa (risultanti dall'inversione di un singolo bit). Se il codice ha $2^m$ parole codice valide, e ciascuna richiede n+1 combinazioni di bit uniche (la parola stessa più le n possibili versioni errate a singolo bit), la condizione necessaria e sufficiente è che:
+$$(n+1)2^m\leq 2^n \iff (m+r+1)2^m\leq 2^{m+r} \iff m+r+1 \leq 2^r $$
+Questa è una relazione tra il numero minimo di bit di controllo e la lunghezza della parola di memoria.\ref{fig:bit_controllo_lab}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{images/bit_controllo.jpg}
+    \caption{Numero di bit di controllo per un codice che può correggere errori singoli}
+    \label{fig:bit_controllo_lab}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{images/esempio_parita_diagrammi_Venn.jpg}
+    \caption{(a) codifica di 1100 (b) aggiunta parità pari (c)Errore in AC}
+    \label{fig:esempio_parita_diagrammi_Venn}
+\end{figure}
+Ora illustriamo \textbf{l'algoritmo di Hamming}:\newline
+può essere usato per costruire codici a correzione di errore per parole di memoria dalla dimensione arbitraria. Data una parola a m bit, vengono aggiunti r bit di parità (di controllo) nelle posizioni a potenza di 2. I bit sono numerati a partire da 1, con 1 bit nella posizione più significativa. Ciascun bit di parità controlla le posizioni che scritte in binario, hanno un "1" nella posizione corrispondente al bit di controllo. Esempio:\begin{itemize}
+    \item $P_1(pos. 2^0=1$): Controlla tutte le posizioni che hanno l'ultimo bit a 1 (1, 3, 5, 7...).
+    \item $P_2(pos. 2^1=2)$: Controlla tutte le posizioni che hanno il secondo bit a 1 (2, 3, 6, 7...).
+    \item $P^3(pos. 2^2=4)$: Controlla tutte le posizioni che hanno il terzo bit a 1 (4, 5, 6, 7...).
+\end{itemize} 
+In generale il bit di posto b è controllato dai bit $ b_1, b_2,\dots,b_n$ tali che $b_1 + b_2 + \dots + b_n = b$. Ogni bit di dati è sorvegliato da almeno due bit di controllo diversi. È questo "incrocio" che permette la correzione.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{images/esampio_hamming_16bit.jpg}
+    \caption{Costruzione del codice di hamming per la parola di memoria 1111000010101110 aggiungendo 5 bit di controllo ai 16 bit di dati}
+    \label{fig:esampio_hamming_16bit}
+\end{figure}
+Un esempio\ref{fig:esampio_hamming_16bit} su questa parola 1111000010101110 di 16 bit alla quale sono stati aggiunti 5 bit di parità diventando 001011100000101101110 a 21 bit. Ora supponiamo che il bit 5 subisca un errore e venga invertito: 001011100000101101110. Controllando i 5 bit di parità si otterrebbe:
+\begin{itemize}
+    \item bit di parità 1 non corretto (1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21 contengono cinque 1)
+\item bit di parità 2 corretto (2, 3, 6, 7, 10, 11, 14, 15, 18, 19 contengono sei 1)
+\item bit di parità 4 non corretto (4, 5, 6, 7, 12, 13, 14, 15, 20, 21 contengono cinque 1)
+\item bit di parità 8 corretto (8, 9, 10, 11, 12, 13, 14, 15 contengono due 1)
+\item bit di parità 16 corretto (16, 17, 18, 19, 20, 21 contengono quattro 1).
+\end{itemize}
+Il numero totale di 1 nelle posizioni 1, 3, 5, 7, 9, 11, 13, 15, 17, 19 e 21 dovrebbe essere un numero pari dato che si sta usando la parità pari. Il bit non corretto deve essere uno dei bit controllati dal bit di parità 1, cioè uno fra i bit 1, 3, 5, 7, 9, 11, 13, 15, 17, 19 e 21. 
+
+Il bit di parità 4 è errato, il che significa che uno fra i bit 4, 5, 6, 7, 12, 13, 14, 15, 20 e 21 non è corretto. L'errore deve essere uno dei bit presenti in entrambe le liste, cioè il bit 5, 7, 13, 15 oppure 21. Tuttavia il bit 2 è corretto e quindi i bit 7 e 15 sono eliminati. Analogamente il bit 8 è corretto, eliminando così il bit 13. Infine, dato che anche il bit 16 è corretto, va eliminato pure il 21. Il solo bit rimasto è il bit 5, che è quindi quello in cui si è verificato l'errore; dato che è stato letto come 1, esso deve assumere il valore 0. Questa successione di considerazioni consente di correggere gli errori.
+Un semplice metodo per trovare i bit errati consiste nel calcolare inizialmente tutti i bit di parità. Se sono tutti corretti allora non si è verificato alcun errore (oppure più di uno).
+Successivamente si sommano tutti i bit di parità errati, contando 1 per il bit 1, 2 per il bit 2, 4 per il bit 4, e così via, e la somma risultante corrisponde alla posizione del bit errato.
+Se per esempio i bit di parità 1 e 4 sono errati, ma 2, 8 e 16 sono corretti, significa che il 
+bit 5 (1 + 4) è stato invertito.
+%Codici correttori end
+%Memoria cache start
+\subsubsection{Memoria cache}
+La memoria cache è un tipo di memoria piccola e molto veloce il cui scopo principale è immagazzinare le parole di memoria (dati e istruzioni) che sono state utilizzate più di recente. La \textbf{cache} è stata introdotta per risolvere il problema della disparità di velocità tra la CPU, che è diventata sempre più veloce, e la memoria principale (RAM), che è rimasta relativamente più lenta.\newline
+L'idea di base è semplice: le parole di memoria usate più di frequente sono mantenute all'interno della cache. Quando la CPU necessita di una parola, la cerca nella cache e, solo nel caso in cui essa non sia presente (\textbf{cache miss}), la richiede alla memoria centrale. È possibile ridurre drasticamente il tempo medio di accesso se una frazione significativa delle parole è presente nella cache.
+Il successo o il fallimento dipendono quindi da quali parole sono presenti nella cache.\newline
+L'efficacia della memoria cache si basa sul \textbf{principio di località} (locality principle), che afferma che i riferimenti di memoria di un programma non sono casuali ma tendono ad aggregarsi:
+\begin{itemize}
+    \item \textbf{Località Temporale:} se una posizione di memoria è stata utilizzata di recente, è probabile che venga riutilizzata a breve.
+    \item  \textbf{Località Spaziale:} Se una posizione di memoria è stata utilizzata, è probabile che anche le posizioni di memoria adiacenti vengano utilizzate presto.
+\end{itemize}
+Quando si verifica un cache miss, l'intera linea di cache (cache line), ovvero un blocco di parole consecutive, viene trasferita dalla memoria principale alla cache, sfruttando il principio di località spaziale.\newline
+Per disporre sistemi di memoria più sofisticati, è possibile avere anche tre o più livelli di cache:
+\begin{itemize}
+    \item (L1): generalmente è separata in cache istruzioni (L1-I) e cache dati (L1-D), ed è spesso inclusa direttamente nel chip della CPU.
+    \item (L2): non si trova nel chip del processore, ma che può essere inclusa all'interno del suo involucro; questa cache, di solito è \textbf{unificata} (contiene sia dati che istruzioni) e la sua dimensione può variare dai 512 Kb a 1 Mb.
+    \item (L3): Nei sistemi più recenti, può essere presente una cache più grande, a volte condivisa tra più core.
+\end{itemize}
+%Memoria cache end
+%Tipi di memorie start
+\subsubsection{Tipi di memorie}
+La memoria principale (\textbf{RAM}) è generalmente realizzata con DRAM (Dynamic RAM). Le \textbf{DRAM} utilizzano un transistor e un condensatore per bit e necessitano di essere rinfrescate (\textbf{refreshed}) periodicamente, poiché la carica si disperde. Le DRAM offrono un'alta densità di bit per chip, ma sono relativamente lente (decina di nanosecondi).
+Per costruire la memoria cache, che è estremamente veloce, si utilizza la \textbf{SRAM} (Static RAM). Le SRAM non richiedono il refresh e mantengono i dati finché sono alimentate; sono molto più veloci (un nanosecondo o meno) rispetto alle DRAM.
+Esistono anche le memorie \textbf{ROM} (Read-Only Memory), che sono non volatili, ovvero mantengono i dati anche senza alimentazione. Esempi di ROM includono le PROM (programmabili una sola volta), le EPROM (cancellabili con luce ultravioletta), le EEPROM (cancellabili elettricamente) e la memoria Flash,. La \textbf{memoria Flash} è cancellabile a blocchi e riscrivibile ed è molto usata in dispositivi come le fotocamere digitali e per sostituire i dischi (SSD).
+Storicamente, i chip di memoria sono stati raggruppati su schede, come i \textbf{SIMM} (Single Inline Memory Module) o, più comunemente oggi, i \textbf{DIMM} (Dual Inline Memory Module), come le DDR3 DIMM.
+%Tipi di memorie end
+%Memoria Principale end 
+%Memoria Secondaria start
+\subsection{Memoria Secondaria}
+%Gerarchie di memoria start
+\subsubsection{Gerarchie di memoria}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/piramide_gerarchia_memoria.jpg}
+    \caption{Gerarchia di memoria a 5 livelli}
+    \label{fig:piramide_gerarchia_memoria}
+\end{figure}
+Nella gerarchia di memoria, le memorie secondarie si trovano al di sotto della memoria principale e della cache. Scendendo nella gerarchia:
+\begin{itemize}
+    \item Il tempo di accesso (access time) diventa maggiore.
+    \item La capacità di archiviazione (storage capacity) aumenta.
+    \item Il costo per bit (misurato in dollari/gigabyte) diminuisce.
+\end{itemize}
+Nella parte superiore della gerarchia si trovano i \textbf{registri} della CPU, ai quali si può accedere alla stessa velocità della CPU. 
+Successivamente vi è la memoria \textbf{cache}, la cui dimensione può variare da 32 KB fino ad alcuni megabyte.
+La \textbf{memoria centrale} è il passo successivo e la sua dimensione è compresa tra 16 MB per i sistemi più economici fino a decine di gigabyte per quelli professionali. 
+Successivamente troviamo i \textbf{dischi magnetici o dischi a stato solido}, la vera forza lavoro per quanto riguarda la memorizzazione permanente. 
+Infine ci sono i \textbf{nastri magnetici} e i \textbf{dischi ottici} utilizzati per l'archiviazione.
+%Gerarchie di memoria end
+%Dischi magnetici start
+\subsubsection{Dischi magnetici}
+I dischi magnetici (\textbf{hard disk}) sono il tipo di memoria secondaria più comune e sono composti da uno o più piatti di alluminio ricoperti di materiale magnetico.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/porzione_traccia_disco_meccanico.jpg}
+    \caption{Una porzione di una traccia di un disco meccanico}
+    \label{fig:porzione_traccia_disco_meccanico}
+\end{figure}
+I dati sono registrati su anelli concentrici chiamati \textbf{tracce}. Ogni traccia è divisa in \textbf{settori} di lunghezza fissa, che tipicamente contengono 512 byte di dati, preceduti da un preambolo per la sincronizzazione della testina. Dopo i dati segue un codice per la correzione di errore (ECC, Hamming o Reed-Solomon). \newline
+La geometria di un disco include bracci mobili con \textbf{testine} di lettura/scrittura che fluttuano su un cuscino d'aria sulla superficie del piatto. Una corrente che passa attraverso la testina magnetizza la superficie che si trova al di sotto, orientando le particelle magnetiche in direzione opposta a seconda del verso della corrente. Quando la testina passa sopra un'area magnetizzata, viene indotta nella testina una corrente positiva o negativa rendendo così possibile la lettura dei bit memorizzati.\newline
+L'insieme delle tracce alla stessa distanza dal centro su tutti i piatti è chiamato \textbf{cilindro}.\newline
+Tra due settori consecutivi vi è un piccola area chiamata \textbf{spazio tra settori}.\newline
+La maggior parte dei dischi consiste di più piatti impilati verticalmente in cui ciascuna superficie ha il proprio braccio e la propria testina. I dischi dei PC attuali hanno dai 6 ai 12 piatti, mettendo quindi a disposizione dalle 12 alle 24 superfici registrabili.\newline
+Le prestazioni dei dischi si misurano con il \textbf{tempo di accesso}, che combina il \textbf{tempo di ricerca} (seek time) per muovere la testina al cilindro corretto e la latenza rotazionale per aspettare che il settore desiderato passi sotto la testina.\newline
+A ogni disco è associato un processore dedicato chiamato controllore del disco, il quale deve accertare i comandi dal software.
+%Dischi magnetici end
+%Dischi IDE start
+\subsubsection{Dischi IDE}
+I dischi \textbf{IDE} (Integrated Drive Electronics) sono l'evoluzione dei dischi per personal computer, dove l'elettronica del controller è stata integrata con il drive.
+\begin{itemize}
+    \item I primi dischi IDE utilizzavano convenzioni \textbf{BIOS} (Basic Input Output System) con limiti sul numero di testine, cilindri e settori, portando a una capacità massima iniziale di 504 MB.
+    \item Questi limiti sono stati superati attraverso l'introduzione dell'\textbf{LBA} (Logical Block Addressing), che numera i settori in modo sequenziale partendo da zero, eliminando la necessità di conoscere la geometria fisica del disco.
+\end{itemize}
+%Dischi IDE end
+%Dischi SCSI start
+\subsubsection{Dischi SCSI}
+I dischi \textbf{SCSI} (Small Computer System Interface) sono un'alternativa ai dischi IDE, che offrono un'interfaccia e tassi di trasferimento dati molto più veloci.
+\begin{itemize}
+    \item I sistemi SCSI utilizzano un bus e un protocollo più complessi per comunicare. Le versioni più recenti, come Ultra320 SCSI, hanno aumentato notevolmente la velocità.
+    \item Similmente a IDE, i dischi SCSI non sono concettualmente diversi (anch'essi sono organizzati in cilindri, tracce e settori), ma l'interfaccia e la gestione dei trasferimenti sono più sofisticate.
+\end{itemize}
+%Dischi SCSI end
+%Raid start
+\subsubsection{Raid}
+RAID (Redundant Array of Independent Disks, ora reinterpretato come\textbf{ Redundant Array of Inexpensive Disks} o Independent Disks) è una tecnica che utilizza più dischi per migliorare le prestazioni e/o la tolleranza ai guasti.\newline
+I dati sono distribuiti (stripping) su più dischi per consentire operazioni parallele e aumentare la velocità. Al software appaiono come un singolo disco. Esistono diversi livelli di RAID (RAID 0, 1, 2, 3, 4, 5, 6), ciascuno con diverse strategie per la distribuzione dei dati e l'uso di ridondanza (parità o mirroring) per la tolleranza ai guasti.
+\begin{itemize}
+    \item \textbf{Raid 0 (Striping): }I dati vengono suddivisi in stripes consecutive e distribuiti in modo round-robin su più dischi. I settori da 0 a k - 1 che compongono la strip 0, i settori da k a 2k - 1 la strip 1 e così via; il RAID livello 0 lavora meglio quando le richieste sono di grandi dimensioni. Lo svantaggio è che non ha nessuna ridondanza; se un disco fallisce, tutti i dati sono persi. Non è considerato un vero RAID.
+    \item \textbf{Raid 1 (Mirroring): } Duplicazione completa (mirroring) dei dati su un set di dischi. Ogni strip è scritta due volte.  Eccellente tolleranza ai guasti e buone prestazioni in lettura (fino al doppio), ma è costoso (il 50\% dello spazio è sprecato per la ridondanza).
+    \item \textbf{Raid 2: } Opera a livello di parola o byte (non a livello di settore/strip). Aggiunge bit di controllo di codice Hamming per la correzione degli errori e richiede che i dischi siano sincronizzati. Richiede un elevato numero di dischi e un controller complesso; offre un basso numero di richieste I/O al secondo. Lo schema ha senso soltanto se si utilizza un numero significativo di unità (anche con 32 dischi di dati e 6 dischi di parità l'overhead è del 19%). 
+    \item \textbf{Raid 3: } è una versione semplificata del RAID livello 2. Il bit di parità viene calcolato per ogni parola di dati e poi scritto su un apposito disco. Dato che le parole di dati sono distribuite su più unità, anche in questo caso, come per il RAID livello 2, i dischi devono essere sincronizzati. Permette la correzione di errori singoli (se il disco guasto è noto) e offre un throughput elevato, ma offre un basso numero di richieste I/O al secondo.
+    \item \textbf{Raid 4: } Utilizza stripes (come RAID 0 e 1), ma con un disco di parità dedicato dove viene scritta la parità XOR di tutti gli stripes. Se un disco si guasta è possibile ricalcolare i byte persi grazie al disco di parità. Questo schema protegge dalla perdita di un disco, ma ha prestazioni scarse quando si aggiornano piccole quantità di dati (ogni modifica richiede quattro operazioni (due letture e due scritture) per aggiornare sia i dati che la parità). Il disco di parità può inoltre diventare un collo di bottiglia, a causa del grande carico di lavoro che pesa su di esso. 
+    \item \textbf{Raid 5: } Simile a RAID 4, ma distribuisce le informazioni di parità su tutti i dischi, eliminando il collo di bottiglia del disco di parità dedicato. Tuttavia, quando si verifica un guasto a un disco, la ricostruzione del suo contenuto è un processo complesso.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/Illustrazione_livelli_raid.jpg}
+    \caption{Raid dal livello 0 al livello 5; i dischi in grigio sono dischi di backup e per la parità.}
+    \label{fig:illustrazione_livelli_raid}
+\end{figure}
+%Raid end
+%Dischi a stato solido start
+\subsubsection{Dischi a stato solido}
+Sono dischi basati su memoria flash non volatile e si sono diffusi come alternativa ad alta velocità ai tradizionali dischi magnetici.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/disco_a_stato_solido.jpg}
+    \caption{Disco con memoria flash}
+    \label{fig:disco_stato_solido}
+\end{figure}
+I dischi flash sono fatti di celle di memoria flash a stato solido. Queste celle sono costituite da un singolo transistor flash speciale. Per programmare il bit flash, si applica alla porta di controllo una tensione elevata che accelera il processo di iniezione a caldo nella porta flottante. Gli elettroni vengono intrappolati nella porta flottante, portando così una carica negativa interna al transistor flash. La carica negativa aumenta la tensione necessaria ad accendere il transistor flash e, testando se il canale si accende con una tensione alta o bassa, è possibile determinare se porta floattante è carica oppure no, con conseguente valore di 0 o 1 della cella flash.\newline
+\begin{itemize}
+    \item Vantaggio: Prestazioni superiori (2-3 volte più veloci) e tempo di ricerca nullo. Sono ideali per dispositivi mobili in quanto non hanno parti in movimento.
+    \item Svantaggio: Costo per gigabyte significativamente più alto e durabilità limitata a circa 100.000 scritture per cella. Per mitigare questo, si usa l'algoritmo di wear leveling.
+\end{itemize}
+%Dischi a stato solido end
+%CD-ROM start
+\subsubsection{CD-ROM}
+Il funzionamento dei CD-ROM si basa sulla distinzione fisica tra \textbf{pit} (fossette) e \textbf{land} (aree piatte).
+\begin{itemize}
+    \item \textbf{Meccanismo di lettura:} Un laser a infrarossi a bassa potenza viene proiettato sul disco. I pit sono progettati per avere un'altezza pari a un quarto della lunghezza d'onda della luce laser. Questo fa sì che la luce riflessa da un pit sia sfasata di mezza lunghezza d'onda rispetto a quella riflessa dal land circostante, causando un'interferenza distruttiva. Il fotorivelatore traduce questa assenza di luce come un pit.
+    \item \textbf{Codifica dei bit:} Contrariamente a quanto si potrebbe pensare, non è il pit in sé a rappresentare lo 0 o l'1. Il sistema rileva come 1 la transizione pit-land o land-pit, mentre l'assenza di transizione viene interpretata come 0.
+    \item \textbf{Velocità Lineare Costante (CLV):} Per garantire un flusso di dati uniforme, i CD-ROM ruotano a velocità variabile. La rotazione è più veloce vicino al centro (530 RPM) e rallenta man mano che la testina si sposta verso l'esterno (fino a 200 RPM), mantenendo una velocità lineare costante di 120 cm/sec.
+\end{itemize}
+%CD-ROM end
+%CD-Riscrivibili e CD-Registrabili start
+\subsubsection{CD-Riscrivibili e CD-Registrabili}
+Poiché i CD-R (CD-Registrabili) e CD-RW (CD-ReWritable, CD -Riscrivibili) non possono avere fossette fisiche stampate in fabbrica, utilizzano diverse strategie ottiche per simulare i pit:
+\begin{itemize}
+    \item \textbf{CD-R} (Dye): Utilizzano uno strato di tinta (cianina o ftalocianina) tra il policarbonato e lo strato riflettente. In fase di scrittura, un laser ad alta potenza (8-16 mW) scalda la tinta creando una macchia scura. In fase di lettura, il fotorivelatore vede la differenza tra le macchie scure e le aree trasparenti, interpretandole come pit e land.
+    \item  \textbf{CD-RW} (Phase Change): Lo strato di registrazione è una lega metallica con due stati stabili: cristallino (alta riflettività) e amorfo (bassa riflettività).
+    \begin{itemize}
+        \item Un laser ad alta potenza fonde la lega rendendola amorfa (pit).
+        \item Un laser a media potenza la fonde permettendole di ricristallizzare (land).
+        \item Il laser a bassa potenza serve solo per la lettura senza alterare lo stato fisico.
+    \end{itemize}
+\end{itemize}
+I CD-RW vergini sono molto più costosi dei CD-R vergini e per questo non li hanno sostituiti completamente. Inoltre il fatto che, una volta scritto, un CD-R non possa essere cancellato accidentalmente, rappresenta un gran vantaggio per il backup dei dischi.
+%CD-Riscrivibili e CD-Registrabili end
+%DVD e Blu-ray start
+\subsubsection{DVD e Blu-ray}
+L'aumento massiccio della capacità di archiviazione (dai 650 MB del CD ai 25 GB del Blu-ray) è dovuto principalmente alla riduzione delle dimensioni fisiche e alla precisione del laser:
+\begin{itemize}
+    \item \textbf{DVD (Digital Versatile Disc):} Utilizza un laser rosso con una lunghezza d'onda più corta (0,65 micron contro 0,78 dei CD), che permette di leggere pit più piccoli (0,4 micron) e tracce più strette (0,74 micron).
+    \item \textbf{Tecnologia Dual-Layer:} Alcuni DVD includono due strati di registrazione su un lato: uno riflettente e uno semiriflettente. Il laser può mettere a fuoco l'uno o l'altro strato semplicemente cambiando la sua lunghezza focale. Il livello più basso richiede che i pit e i land siano leggermente più grandi per essere leggibili in modo affidabile, e per questo motivo la sua capacità è leggermente inferiore rispetto a quella dello strato superiore.\newline
+    Ci sono quattro formati di DVD:
+    \begin{itemize}
+        \item singolo lato, singolo strato (4,7 GB); 
+        \item singolo lato, doppio strato (8,5 GB);
+        \item doppio lato, singolo strato (9,4 GB);
+        \item doppio lato, doppio strato (17 GB).
+    \end{itemize}
+    \item  \textbf{Blu-ray:} Utilizza un laser blu-violetto con una lunghezza d'onda ancora inferiore, consentendo una messa a fuoco estrema e supportando pit e land drasticamente più piccoli, portando la capacità a 25 GB per strato.
+\end{itemize}
+%DVD e Blu-ray end
+%Memoria Secondaria end
+%Input/Output start
+\subsection{Input/Output}
+Un calcolatore è composto da tre componenti principali: la CPU, le memorie e i dispositivi di I/O. 
+%Bus start
+\subsubsection{Bus}
+Il sistema di I/O è strutturato attorno ai bus, cammini elettrici comuni che collegano CPU, memoria e dispositivi.
+\begin{itemize}
+    \item  \textbf{Struttura Logica: } Ogni dispositivo è composto da un \textbf{controller} (l'elettronica che gestisce il dispositivo) e dal dispositivo fisico stesso. Il controller comunica con la CPU tramite registri interni per ricevere comandi o fornire stato. In particolare il suo scopo è governare il proprio dispositivo di I/O e gestire il suo accesso al bus.
+    \item \textbf{Meccanismi di Trasferimento: } il controller legge o scrive dati direttamente nella memoria principale senza l'intervento costante della CPU grazie al \textbf{DMA} (Direct Memory Access).\newline
+    Al termine di un'operazione, il controller genera un segnale di \textbf{interrupt} che forza la CPU a sospendere il programma corrente per eseguire una procedura specifica chiamata \textbf{interrupt handler} che controlla se ci sono errori, compie le azioni eventualmente necessarie e informa il sistema operativo che l'I/O è terminato.
+    \item Arbitraggio: Poiché più componenti possono richiedere il bus simultaneamente, un chip chiamato \textbf{arbitro del bus} decide a chi concederne l'uso, dando solitamente la precedenza ai dispositivi di I/O rispetto alla CPU per evitare perdite di dati (processo noto come \textbf{cycle stealing} che rallenta le prestazioni) del calcolatore
+    \item \textbf{Evoluzione:} Dai bus paralleli come ISA (Industry Standard Architecture, lento) e PCI (Peripheral Component Interconnect, più veloce, 133 MB/sec), si è passati al PCI Express (PCIe),,. Il PCIe non è tecnicamente un bus ma una rete point-to-point a commutazione di pacchetti, che usa connessioni seriali veloci chiamate lane (fino a 16 GB/sec per schede grafiche x16).
+\end{itemize}
+%Bus end
+%Terminali start
+\subsubsection{Terminali}
+I terminali sono le principali interfacce utente:
+\begin{itemize}
+    \item  \textbf{Tastiere: } Quando un tasto viene premuto o rilasciato, viene generato un interrupt. Il software (gestore degli interrupt) legge il numero del tasto e gestisce in modo logico le sequenze combinate come SHIFT o CTRL.
+    \item \textbf{Touch Screen: } Esistono tre tecnologie principali: infrarossi (rilevano l'interruzione di fasci di luce), resistivi (pressione tra due strati flessibili) e capacitivi. Gli schermi multitouch moderni usano la capacità reciproca per rilevare più dita contemporaneamente, evitando il problema del ghosting (false coordinate) tipico delle altre tecnologie.
+    \item \textbf{Display LCD: } Basati sui cristalli liquidi (molecole organiche viscose che si muovono come un liquido, ma che hanno anche una struttura spaziale simile a quella di un cristallo) che cambiano orientamento con campi elettrici, controllando il passaggio della luce polarizzata. Esistono a matrice passiva o attiva (TFT); quest'ultima usa transistor in ogni pixel per immagini più nitide.
+    \item \textbf{Ram della scheda video: }  Una memoria dedicata memorizza l'immagine come bitmap.
+    Su uno schermo di 1600 x 1200 pixel (picture element, "elemento d'immagine") la RAM della scheda video deve contenere 1600 x 1200 valori; se è RGB ogni pixel deve memorizzare un valore RGB (3 byte), quindi uno schermo 1600 x 1200 pixel e 3 byte per pixel richiede circa 5.5 MB di memoria Ram per memorizzare l'immagine. Per video a 25 fps circa 155MB/s.
+    Per risparmiare spazio, si può usare il colore indicizzato, dove ogni pixel punta a una tavolozza (palette) di 256 colori a 24 bit. 
+\end{itemize}
+%Terminali end
+%Mouse start
+\subsubsection{Mouse}
+Il mouse permette di puntare elementi sullo schermo.
+Esistono tre tipi di mouse: meccanici, ottici e opto-meccanici.
+\begin{itemize}
+    \item \textbf{Meccanici: } composto da due rotelle di gomma sporgenti con degli assi disposti perpendicolarmente, in tal modo quando il mouse veniva spostato parallelamente a uno degli assi principali, ruotava soltanto una rotella.
+    \item \textbf{Ottici: } che ha sul fondo un LED (Light Emitting Diode, “diodo luminescente”) e un fotorilevatore. Viene utilizzato su uno speciale tappetino sul quale c'è una griglia di linee molto vicine fra loro; quando il mouse si muove il fotorilevatore riconosce l'incrocio tra due linee rilevando un cambiamento nella quantità di luce generata dal LED che viene riflessa. 
+    \item \textbf{opto-meccanico: } anch'esso dotato di una pallina che fa ruotare due cilindretti perpendicolari tra loro. Questi sono collegati a codificatori che hanno una serie di fori attraverso i quali può passare la luce; quando il mouse si sposta, i cilindretti ruotano e la luce colpisce il rilevatore ogni volta che un foro si trova allineato con il LED e il suo fotorilevatore. Il numero di impulsi che vengono rilevati è proporzionale allo spostamento effettuato. 
+\end{itemize}
+In genere un mouse spedisce al calcolatore una sequenza di 3 byte, chiamata in alcuni casi mickey. Il primo byte contiene la distanza della x effettuata dall'ultimo movimento, mentre il secondo byte fornisce la stessa informazione per la y e il terzo byte contiene lo stato dei pulsanti del mouse. 
+%Mouse end 
+%Controller di Gioco start
+\subsubsection{Controller di Gioco}
+\begin{itemize}
+    \item \textbf{Wiimote: } Utilizza un accelerometro a 3 assi (masse che variano la capacità elettrica con l'accelerazione) per tracciare il movimento nello spazio. Per il puntamento fine, usa una telecamera interna che inquadra una barra sensore con LED posti sopra la TV.
+    \item \textbf{Kinect: } Utilizza la "luce strutturata". Un laser emette una griglia di punti infrarossi e una telecamera ne cattura la distorsione per mappare la profondità della stanza e riconoscere i corpi umani,.
+\end{itemize}
+%Controller di Gioco end
+%Stampanti start
+\subsubsection{Stampanti}
+\begin{itemize}
+    \item \textbf{Stampanti laser: } All'inizio di ciascun ciclo di pagina il tamburo è caricato fino a circa 1000 volt e rivestito con un materiale fotosensibile. Successivamente la luce generata dal laser passa lungo tutta lunghezza del tamburo e per ottenere la deviazione orizzontale si utilizza uno specchio ottagonale rotante. Il fascio di luce viene modulato per produrre regioni luminose e regioni scure: le parti del tamburo colpite dal raggio perdono la loro carica elettrica. \newline
+    Il tamburo, dopo aver disegnato una linea di punti, ruota di una frazione di grado per permettere il disegno della linea successiva. A questo punto la prima linea di punti raggiunge il toner, un contenitore di polvere nera elettrostaticamente sensibile. II toner è attirato dai punti che hanno ancora una carica elettrica, formando così un'immagine visiva sulla linea del tamburo. Un istante dopo, ruotando, il tamburo ricoperto di toner viene premuto contro il foglio di carta, trasferendo su questo la polvere nera. Il foglio passa quindi attraverso dei rulli riscaldati per fissare l'immagine, fondendo in modo permanente il toner sulla carta. Nel seguito della rotazione il cilindro viene scaricato e ripulito di ogni residuo del toner, per poter essere nuovamente caricato e ricoperto di materiale fotosensibile, pronto per la stampa della pagina successiva.\newline
+    Una stampante laser può stampare in bianco e nero ma non può riprodurne le sfumature. Per riprodurre la scala dei grigi la tecnica più comune è quella dei mezzitoni. A seconda dei valori del grigio diverse celle vengono riempite di nero in maniera tale che l'occhio le percepisca come fosse del grigio. 
+    \item \textbf{Stampante a colori: }Le immagini a colori vengono viste in due modi distinti:
+    \begin{itemize}
+     \item le immagini per luce trasmessa sono create mediante la sovrapposizione di tre colori primari additivi, il rosso, il verde e il blu.
+     \item  le immagini per luce riflessa assorbono alcune lunghezze d’onda di luce e riflettono le restanti. Queste immagini sono create dalla sovrapposizione di tre colori primari sottrattivi, il ciano (assorbito dal rosso), il giallo (assorbito dal blu) e il magenta (assorbito dal verde).
+    \end{itemize}
+    Le cinque tecnologie di stampa attualmente in uso si basano sul sistema CMYK (Cyan, Magenta, Yellow, blacK).
+    \item \textbf{Stampanti speciali: } 
+    \begin{itemize}
+        \item \textbf{stampanti a colori a getto d'inchiostro:} funzionano come quelle monocromatiche ma con quattro cartucce (C, M, Y e K); a un basso prezzo forniscono risultati di buona qualità ma le cartucce non sono molto economiche.
+        \item  \textbf{stampanti a inchiostro solido:} contengono quattro speciali inchiostri a cera solidificati in blocchi che vengono poi sciolti all'interno di serbatoi riscaldati. 
+        \item \textbf{stampanti a getto di cera:} hanno un ampio nastro rivestito di quattro inchiostri a cera e suddiviso in settori lunghi quanto la larghezza della pagina. Al passaggio della carta migliaia di elementi riscaldanti sciolgono la cera, che si fonde con la carta. 
+        \item \textbf{stampanti a sublimazione:} (passaggio dallo stato solido a quello gassoso senza passare per il liquido, esempi: ghiaccio secco e zolfo) un elemento mobile contenente i coloranti CMYK passa sopra una testina di stampa in cui vi sono migliaia di elementi riscaldanti programmabili; i coloranti vengono vaporizzati e assorbiti da una carta speciale collocata vicino alla testina. Maggiore è la temperatura, maggiore è l'intensità del colore. 
+        \item \textbf{stampante termica:} contiene una piccola testina di stampa su cui vi sono un certo numero di piccoli aghi. Quando una corrente passa attraverso un ago, vengono disegnati su della carta speciale termosensibile dei punti in corrispondenza degli aghi caldi.
+    \end{itemize}
+\end{itemize}
+%Stampanti end
+%Apparecchiature per Telecomunicazioni start
+\subsubsection{Apparecchiature per Telecomunicazioni}
+Il sistema di telecomunicazione permette la trasmissione di dati tra computer, spesso utilizzando l'infrastruttura telefonica o televisiva esistente.
+\begin{itemize}
+    \item \textbf{Modem (Modulatore/Demodulatore): } Poiché le linee telefoniche analogiche sono progettate per la voce umana e non per segnali digitali grezzi (che usano 0V per lo '0' e 3-5V per '1'), i segnali subirebbero una distorsione eccessiva. Il modem risolve il problema utilizzando un'onda sinusoidale chiamata portante (tra 1000 e 2000 Hz) e modificandone le caratteristiche attraverso tre tecniche di modulazione:
+    \begin{itemize}
+        \item \textbf{Modulazione di Ampiezza (AM):} Vengono utilizzati due diversi livelli di tensione per rappresentare 0 e 1.
+        \item \textbf{Modulazione di Frequenza (FM/FSK):} La tensione resta costante, ma la frequenza della portante cambia per distinguere i bit.
+        \item \textbf{Modulazione di Fase (PM):} La fase della portante viene invertita di 180 gradi quando i dati cambiano. Sistemi complessi usano la codifica di fase dibit, che sposta la fase di angoli specifici (45, 135, 225, 315 gradi) per trasmettere 2 bit per intervallo.
+    \end{itemize}
+    È fondamentale distinguere tra Baud rate (numero di cambiamenti di segnale al secondo) e Bit rate (numero di bit trasmessi al secondo); il bit rate è solitamente un multiplo del baud rate. Le linee possono essere \textbf{full-duplex} (trasmissione simultanea in entrambe le direzioni), \textbf{half-duplex} (una direzione alla volta) o \textbf{simplex} (una sola direzione fissa).
+    \item \textbf{ADSL (Asymmetric Digital Subscriber Line):} L'ADSL ottimizza il doppino telefonico (local loop) rimuovendo i filtri che limitavano la banda a 3000 Hz per la voce e sfruttando uno spettro fino a 1,1 MHz.
+    \begin{itemize}
+        \item  \textbf{Canalizzazione:} Lo spettro è diviso in 256 canali indipendenti da 4312,5 Hz ciascuno. Il canale 0 è per la telefonia tradizionale (POTS), i canali 1-5 sono vuoti per evitare interferenze, e i restanti 250 sono usati per dati e controllo.
+        \item \textbf{Asimmetria:} Poiché la maggior parte degli utenti scarica più dati di quanti ne carichi, viene assegnato l'80-90\% della larghezza di banda al canale di download.
+        \item \textbf{Hardware:} Il segnale viene gestito da un NID (Network Interface Device) presso l'utente, uno splitter che separa voce e dati, e un DSLAM (Digital Subscriber Line Access Multiplexer) presso la centrale telefonica.
+    \end{itemize}
+    \item \textbf{Internet via Cavo: } A differenza dell'ADSL, che è una linea privata, il cavo è un mezzo condiviso tra centinaia di utenti collegati a un headend. 
+    \begin{itemize}
+        \item \textbf{Meccanismo di accesso:} Utilizza minislot temporali per la trasmissione; per sincronizzarsi, il modem esegue il ranging, misurando il tempo di propagazione del segnale verso l'headend.
+        \item \textbf{Gestione conflitti:} Se più modem tentano di inviare richieste nello stesso minislot, si verifica una collisione; il modem attende allora un tempo casuale raddoppiato a ogni fallimento successivo.
+        \item \textbf{Sicurezza:} Essendo un mezzo condiviso, tutto il traffico viene crittografato in entrambe le direzioni per impedire intercettazioni tra vicini.
+    \end{itemize}
+\end{itemize}
+%Apparecchiature per Telecomunicazioni end
+%Codici di Caratteri start
+\subsubsection{Codici di Caratteri}
+Ogni calcolatore ha un insieme di caratteri che, come minimo indispensabile, comprende
+le 26 lettere maiuscole, le 26 lettere minuscole, le cifre da 0 a 9 e un insieme di simboli speciali, come spazio, punto, virgola, segno meno e ritorno a capo.\newline
+Per poter utilizzare questi caratteri nel calcolatore occorre assegnare loro un numero:
+per esempio a = 1, b = 2, ..., z = 26, + = 27, - = 28. La corrispondenza tra caratteri e numeri naturali costituisce un codice di caratteri. È necessario che due calcolatori che comunicano tra loro utilizzino lo stesso codice, altrimenti non saranno in grado di capirsi. Per questa ragione sono stati definiti alcuni standard.
+\begin{itemize}
+    \item \textbf{ASCII (American Standard Code for Information Interchange): } È un codice a 7 bit che permette 128 combinazioni totali. \newline
+    I codici compresi tra 0 e 1F (in esadecimale) sono \textbf{caratteri di controllo} e non vengono stampati. Molti dei caratteri di controllo ASCII sono pensati per la trasmissione di dati. Un messaggio potrebbe per esempio consistere di un carattere SOH (Start of Header, “inizio intestazione”), un'intestazione, un carattere STX (Start of Text, “inizio testo”), il testo stesso, un ETX (End of Text, “fine testo”) e infine un carattere EOT (End of Transmission, “fine trasmissione”). I \textbf{caratteri ASCII stampabili} comprendono lettere maiuscole e minuscole, cifre, simboli di punteggiatura e alcuni simboli matematici. 
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\linewidth]{images/ASCII_character_set.jpg}
+        \caption{ASCII character set}
+        \label{fig:ASCII_character_set}
+    \end{figure}
+    \item \textbf{UNICODE: } Progettato per superare i limiti dell'ASCII nelle lingue non inglesi, assegna a ogni simbolo un valore univoco a 16 bit chiamato \textbf{code point}.
+    \begin{itemize}
+        \item \textbf{Organizzazione:} Lo spazio è diviso in blocchi dedicati (es. Latino: 336 posizioni, Greco: 144, Cirillico: 256). Include oltre 20.000 ideogrammi Han (cinesi/giapponesi) e 11.000 sillabe Hangul coreane.
+        \item \textbf{Espansione:} Poiché 65.536 posizioni non bastavano, nel 1996 sono stati aggiunti altri 16 piani, portando il totale a oltre un milione di caratteri.
+    \end{itemize}
+    \item \textbf{UTF-8 (UCS Transformation Format):} Alla fine anche UNICODE ha esaurito i code point e inoltre utilizza 16 bit per carattere per rappresentare testo ASCII puro, il che è uno spreco. Per rispondere a questi problemi, è stato introdotto il sistema UTF-8 UCS Transformation Format. I codici UTF-8 sono di lunghezza variabile, da 1 a 4 byte, e possono codificare circa due miliardi di caratteri. 
+    Uno dei vantaggi di UTF-8 è che i codici da 0 a 127 corrispondono ai caratteri ASCII, che possono essere espressi in 1 byte. 
+    Sono utilizzati in tutto sei formati differenti. 
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\linewidth]{images/UTF-8_ecoding_scheme.jpg}
+        \caption{UTF-8 ecoding scheme}
+        \label{fig:UTF-8_ecoding_scheme}
+    \end{figure}I bit contrassegnati con “d” sono bit di dati.
+    Un altro vantaggio di UTF-8 è il fatto che il primo byte di ogni carattere UTF-8 determina univocamente il numero di byte nel carattere. 
+    Inoltre, i byte successivi al primo in un carattere UTF-8 iniziano sempre con 10, cosa mai vera per il byte iniziale, rendendo il codice auto sincronizzante. Cioè, in caso di errore di comunicazione o di memoria, è sempre possibile andare avanti e trovare l'inizio del carattere successivo.
+\end{itemize}
+%Codici di Caratteri end
+%Input/Output end
+%Organizzazione dei sistemi di calcolo end

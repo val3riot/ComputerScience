@@ -1,0 +1,42 @@
+\babel@toc {italian}{}\relax 
+\babel@toc {italian}{}\relax 
+\contentsline {section}{\numberline {1}Introduzione}{3}{}%
+\contentsline {section}{\numberline {2}Agenti intelligenti}{4}{}%
+\contentsline {subsection}{\numberline {2.1}Agenti e ambiente}{4}{}%
+\contentsline {subsection}{\numberline {2.2}Onniscienza, apprendimento e autonomia}{6}{}%
+\contentsline {subsection}{\numberline {2.3}La natura degli ambienti}{7}{}%
+\contentsline {subsection}{\numberline {2.4}La struttura degli agenti}{10}{}%
+\contentsline {subsection}{\numberline {2.5}Programma Agente}{10}{}%
+\contentsline {subsection}{\numberline {2.6}Agenti reattivi semplici}{11}{}%
+\contentsline {subsection}{\numberline {2.7}Agenti reattivi basati su modello}{13}{}%
+\contentsline {subsection}{\numberline {2.8}Agenti basati su obiettivi}{15}{}%
+\contentsline {subsection}{\numberline {2.9}Agenti basati sull'utilità}{16}{}%
+\contentsline {subsection}{\numberline {2.10}Agenti capaci di apprendere}{17}{}%
+\contentsline {subsection}{\numberline {2.11}Funzionamento dei comportamenti dei programmi agente}{18}{}%
+\contentsline {section}{\numberline {3}Risolvere i problemi con la ricerca}{19}{}%
+\contentsline {subsection}{\numberline {3.1}Agenti Risolutori di problemi}{19}{}%
+\contentsline {subsubsection}{\numberline {3.1.1}Problemi di ricerca e soluzioni}{20}{}%
+\contentsline {subsubsection}{\numberline {3.1.2}Formulazione dei problemi}{21}{}%
+\contentsline {subsection}{\numberline {3.2}Problemi esemplificativi}{22}{}%
+\contentsline {subsubsection}{\numberline {3.2.1}Problemi standardizzati}{23}{}%
+\contentsline {subsubsection}{\numberline {3.2.2}Problemi reali}{25}{}%
+\contentsline {subsection}{\numberline {3.3}Algoritmi di ricerca}{26}{}%
+\contentsline {subsubsection}{\numberline {3.3.1}Ricerca best-first}{27}{}%
+\contentsline {subsubsection}{\numberline {3.3.2}Strutture dati per la ricerca}{29}{}%
+\contentsline {subsubsection}{\numberline {3.3.3}Cammini ridondanti}{30}{}%
+\contentsline {subsubsection}{\numberline {3.3.4}Misurare le prestazioni nella risoluzione di problemi}{31}{}%
+\contentsline {subsection}{\numberline {3.4}Strategie di ricerca non informata}{32}{}%
+\contentsline {subsubsection}{\numberline {3.4.1}Ricerca in ampiezza, BFS}{32}{}%
+\contentsline {subsubsection}{\numberline {3.4.2}Algoritmo di Dijkstra o ricerca a costo uniforme}{33}{}%
+\contentsline {subsubsection}{\numberline {3.4.3}Ricerca in profondità e problema della memoria}{34}{}%
+\contentsline {subsubsection}{\numberline {3.4.4}Ricerca in profondità limitata e ad approfondimento iterativo}{34}{}%
+\contentsline {subsubsection}{\numberline {3.4.5}Ricerca bidirezionale}{36}{}%
+\contentsline {subsubsection}{\numberline {3.4.6}Confronto tra le strategie di ricerca non informata}{38}{}%
+\contentsline {subsection}{\numberline {3.5}Strategie di ricerca informata o euristica}{39}{}%
+\contentsline {subsubsection}{\numberline {3.5.1}Ricerca best-first greedy o “golosa”}{39}{}%
+\contentsline {subsubsection}{\numberline {3.5.2}Ricerca $A^*$}{39}{}%
+\contentsline {subsubsection}{\numberline {3.5.3}Confini di ricerca}{41}{}%
+\contentsline {subsubsection}{\numberline {3.5.4}Ricerca soddisfacente: euristiche inammissibili e ricerca $A^*$ pesata}{42}{}%
+\contentsline {subsubsection}{\numberline {3.5.5}Ricerca con memoria limitata}{43}{}%
+\contentsline {subsubsection}{\numberline {3.5.6}Ricerca euristica bidirezionale}{46}{}%
+\contentsline {subsection}{\numberline {3.6}Funzioni euiristiche}{47}{}%

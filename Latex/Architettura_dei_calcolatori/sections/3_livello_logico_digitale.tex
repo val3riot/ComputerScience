@@ -1,0 +1,850 @@
+%Livello Logico Digitale start
+\section{Livello Logico Digitale}
+ 
+%Porte Logiche e algebra di Boole start
+\subsection{Porte Logiche e algebra di Boole}
+I circuiti digitali possono essere costruiti combinando tra loro un piccolo numero di componenti elementari.
+%Porte logiche start
+\subsubsection{Porte logiche}
+I circuiti digitali operano esclusivamente con due valori logici, solitamente rappresentati da intervalli di tensione specifici (ad esempio, 0-0,5 volt per lo 0 binario e 1-1,5 volt per l'1 binario). Il componente elettronico di base che calcola funzioni su questi segnali è la \textbf{porta logica}, costruita tramite transistor che agiscono come interruttori binari velocissimi.
+\begin{itemize}
+    \item \textbf{Composizione HW:}Tutta la moderna logica digitale si fonda sul fatto che un transistor può essere costruito in modo da funzionare come un velocissimo interruttore binario. 
+    I transistor hanno tre connessioni: il \textbf{collettore}, la \textbf{base} e l’\textbf{emettitore}. 
+    La \textbf{resistenza} è necessaria per limitare la quantità di corrente nel transistor ed evitare che esso si fonda.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\linewidth]{images/esempi_transistor.jpg}
+        \caption{(a) transistor inverter (b) NAND gate (c) NOR gate}
+        \label{fig:esempi_transistor}
+    \end{figure}
+    \item \textbf{Funzionamento: }Quando la tensione in ingresso scende sotto un valore critico, chiamato $V_in$, il transistor viene disabilitato e si comporta come una resistenza infinita. La conseguenza è che l'output del circuito, $V_out$ assume un valore vicino a $V_cc$ (solitamente +1,5 volt): una tensione regolata esternamente che, per questo tipo di transistor, vale generalmente +5 volt. 
+    Quando, al contrario, $V_in$, supera il valore critico, il transistor si attiva e si comporta come un conduttore ideale, facendo scaricare $V_out$ a terra (per convenzione, 0 volt). 
+    \item \textbf{Collegamento in serie:} se V1 e V2 sono alte, allora entrambi i transistor saranno in conduzione e $V_out$ sarà portato al valore basso, mentre, se almeno uno degli ingressi è basso, allora i transistor corrispondenti saranno disattivati e l'uscita sarà alta. In altre parole $V_out$ sarà basso se e soltanto se sia V1 sia V2 sono alte. 
+    \item \textbf{Collegamento in parallelo: }se uno dei due ingressi è alto, allora il transistor corrispondente sarà attivato e l'uscita sarà scaricata a terra, mentre, se entrambi gli ingressi sono bassi, l'uscita rimarrà alta. 
+    \end{itemize}
+    Questi tre circuiti formano le tre porte logiche più semplici, chiamate rispettivamente NOT, NAND e NOR. 
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\linewidth]{images/cinque_porte_logiche_base.jpg}
+        \caption{I simboli e il funzionamento delle cinque porte logiche base}
+        \label{fig:cinque_porte_logiche_base}
+    \end{figure}
+    \begin{itemize}
+    \item  \textbf{Invertitore (NOT)}: Un singolo transistor configurato come descritto sopra inverte il segnale (ingresso basso produce uscita alta e viceversa).
+    \item \textbf{Porta NAND}: Si ottiene mettendo due transistor in serie; l'uscita al collettore sarà bassa (0) solo se entrambi ricevono una tensione alta alle rispettive basi.
+    \item \textbf{Porta NOR}: Si ottiene mettendo due transistor in parallelo; l'uscita sarà bassa se almeno uno dei transistor riceve tensione alla base, poiché essa viene scaricata a terra.
+    \item \textbf{Porta AND: } Se si fa passare il valore in uscita dalla porta NAND in una NOT si ottiene un nuovo circuito, dove l’uscita vale 1 se e solo se entrambi gli ingressi valgono 1; esso realizza la porta logica chiamata AND.
+    \item \textbf{Porta OR: }Analogamente è possibile collegare la porta logica NOR a un invertitore, in modo da ottenere un circuito la cui uscita valga 1 se almeno uno dei due ingressi vale 1, mentre valga 0 se entrambi gli ingressi valgono 0; esso realizza la porta logica chiamata OR. 
+\end{itemize}
+Quindi, è chiaro che le porte NAND e NOR necessitano di due transistor ciascuna, mentre le porte AND e OR ne richiedono tre; per questa ragione molti calcolatori sono basati sulle porte logiche NAND e NOR piuttosto che sulle più familiari porte AND e OR.
+Le porte logiche possono avere anche più di due ingressi, anche se in pratica difficilmente ce ne sono più di otto. \newline
+Esistono due principali tecnologie di costruzione delle porte logiche:
+\begin{itemize}
+    \item \textbf{bipolare:} i tipi più importanti sono la TTL (Transistor-Transistor Logic), per anni utilizzata, e la ECL (Emitter-Coupled Logic), utilizzata quando è richiesto un funzionamento a velocità molto elevate;
+    \item \textbf{MOS} (Metal Oxide Semiconductor, “semiconduttore metallo ossido"): è attualmente impiegata su larga scala nei circuiti dei calcolatori. Sono più lente delle TTL e delle ECL, ma richiedono molta meno potenza e hanno una dimensione decisamente inferiore, permettendo così di metterne insieme un numero elevato in uno spazio limitato. 
+\end{itemize}
+%Porte logiche end
+%Algebra di Boole start
+\subsubsection{Algebra di Boole}
+L'\textbf{algebra di Boole} (chiamata anche algebra di commutazione) è il formalismo matematico utilizzato per descrivere i circuiti digitali, in cui variabili e funzioni possono assumere solo i valori 0 e 1. Questo sistema è fondamentale per progettare l'hardware, poiché permette di trattare i segnali elettrici come entità logiche astratte.
+\begin{itemize}
+    \item Una \textbf{funzione booleana} accetta una o più variabili in ingresso e produce un risultato che dipende unicamente dai valori di tali variabili.
+    \item Poiché ogni variabile ha solo 2 stati possibili, una funzione con n variabili possiede esattamente $2^n$ combinazioni di input. Di conseguenza, la funzione può essere descritta in modo esaustivo da una \textbf{tabella di verità} con $2^n$ righe.
+    \item Ad esempio, per due variabili esistono solo 16 possibili funzioni booleane, corrispondenti alle diverse stringhe di 4 bit ottenibili nella colonna dei risultati della tabella di verità. Al contrario, l'algebra ordinaria ha un numero infinito di funzioni di due variabili.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{images/esempio_tabella_verita.jpg}
+    \caption{Tabella di verità e circuito associato}
+    \label{fig:esempio_tabella_verita}
+\end{figure}
+Per scrivere le funzioni booleane in modo compatto, si usano convenzioni simboliche:
+\begin{itemize}
+    \item \textbf{NOT:} Una barra sopra la variabile ($\overline{A}$) indica l'inversione del valore.
+    \item \textbf{AND:} Viene indicato da un punto o dalla semplice giustapposizione delle variabili (A$\cdot$B o AB). Un termine come ABC assume valore 1 solo se tutti gli ingressi sono 1.
+    \item \textbf{OR:} Viene indicato dal segno più (+)
+\end{itemize}
+Qualsiasi funzione booleana può essere specificata indicando quali combinazioni di variabili producono un output pari a 1. Questo porta alla formulazione della funzione come una somma di termini di prodotto (ognuno lungo n variabili). Ad esempio, la funzione di maggioranza per tre variabili può essere scritta come: $M=\overline{A}BC+A \overline{B}C+AB\overline{C}+ABC$. Questa formulazione è cruciale perché permette di passare direttamente dall'equazione matematica alla progettazione di un circuito fisico utilizzando porte logiche standard.
+%Algebra di Boole end
+% Implementazione delle funzioni booleane start
+\subsubsection{Implementazione delle funzioni booleane}
+Metodo generale per implementare un circuito per qualsiasi funzione booleana:
+\begin{enumerate}
+    \item Scrivere la tabella di verità della funzione;
+    \item Fornire invertitori per generare il complemento di ogni ingresso;
+    \item Disegnare una porta AND per ogni termine con un 1 nella colonna del risultato;
+    \item Collegare le porte AND agli ingressi appropriati;
+    \item Convogliare l'uscita di tutte le porte AND in una porta OR.
+\end{enumerate}
+Spesso è più vantaggioso implementare un circuito utilizzando un solo tipo di porta; di seguito una figura \ref{fig:AND_OR_NOT_usando_NAND_NOR} che mostra come implementare una porta AND, OR, NOT usando solo NAND o NOR.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/AND_OR_NOT_usando_NAND_NOR.jpg}
+    \caption{Implementazione delle porte logiche NOT (a), AND (b) e OR (c) usando soltanto porte NAND o solo porte NOR}
+    \label{fig:AND_OR_NOT_usando_NAND_NOR}
+\end{figure}
+Sebbene questa procedura non porti a circuiti ottimali, nel senso del numero minimo di porte, essa mostra che una soluzione è sempre fattibile. Sia le porte NAND che le porte NOR sono definite \textbf{complete}, perché qualsiasi funzione booleana può essere calcolata utilizzando esclusivamente una di esse. 
+% Implementazione delle funzioni booleane end
+% Equivalenza di ciruiti start
+\subsubsection{Equivalenza di circuiti}
+I progettisti cercano di ridurre il numero di porte per tre ragioni principali:
+\begin{itemize}
+    \item \textbf{Ridurre l'area del chip:} Meno porte occupano meno spazio;
+    \item \textbf{Minimizzare il consumo energetico:} Ogni porta consuma elettricità;
+    \item \textbf{Aumentare la velocità:} I segnali attraversano il circuito più rapidamente se incontrano meno ostacoli.
+\end{itemize}
+Due circuiti si dicono equivalenti se, per ogni possibile combinazione di ingressi, producono lo stesso identico output. Ad esempio, l'espressione $AB+AC$ può essere fattorizzata in $A(B+C)$ applicando la legge distributiva. Sebbene le funzioni siano logicamente identiche, il secondo circuito è preferibile perché richiede meno porte per essere realizzato.\newline
+Di solito un progettista di circuiti parte da una formula e in seguito, applicando le leggi
+dell'algebra di Boole, cerca di semplificarla:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/identita_algebra_booleana.jpg}
+    \caption{Identità dell'algebra booleana}
+    \label{fig:identita_algebra_booleana}
+\end{figure}
+Grazie alle leggi di De Morgan, è possibile rappresentare le stesse porte in modi diversi graficamente; una porta NAND è equivalente ad una porta OR con gli ingressi invertiti. Queste inversioni sono chiamate \textbf{bolle di inversione}, che possono essere spostate lungo una linea per facilitare la conversione dei ciruiti in sole porte NAND o NOR.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/equivalente_porte_logiche_inversione_ingressi.jpg}
+    \caption{Simboli equivalenti per alcune porte logiche: (a) NAND, (b) NOR, (c) AND, (d) OR}
+    \label{fig:equivalente_porte_logiche_inversione_ingressi}
+\end{figure}
+%Equivalenza di ciruiti end
+%Porte Logiche e algebra di Boole end
+%Circuiti logici digitali elementali start
+\subsection{Circuiti logici digitali elementari}
+Il seguente paragrafo descrive i circuiti logici digitali di base, spiegando come le porte logiche vengano raggruppate in moduli complessi che fungono da blocchi costruttivi per l'intero computer.
+%Circuiti integrati (IC) start
+\subsubsection{Circuiti integrati (IC)}
+Le porte logiche non sono vedute singolarmente, ma fabbricante su pezzi rettangolari di silicio chiamati \textbf{circuiti integrati (IC) o chip}. Si tratta di quadrati 5x5 mm circa. Ciascun pin è collegato a un input o a un output di una porta logica oppure all'alimentazione o alla terra.
+\begin{itemize}
+    \item \textbf{Packaging:} I piccoli die (pezzi di silicio) sono montati in contenitori di plastica o ceramica con pin metallici per il collegamento esterno. I formati comuni includono i DIP (Dual Inline Packages) a due file di pin, i PGA (Pin Grid Array) con pubn sul fondo, e gli LGA (Land Grid Array) che usano piazzole piatte premute contro i connettori del socket.
+    \item \textbf{Installazione:} Per garantire l'orientamento corretto, i DIP hanno una tacca, i PGA hanno un pin mancante (chiave), e gli LGA hanno intagli laterali che impediscono l'inserimento errato nel socket.
+    \item \textbf{Limiti fisici:} Le porte reali presentano un ritardo di porta (\textbf{gate delay}), ovvero il tempo necessario per la propagazione del segnale e la commutazione (da picosecondi a pochi nanosecondi). Sebbene si possano integrare oltre un miliardo di transistor, il limite principale è il \textbf{numero di pin}; per questo si progettano circuiti con un alto rapporto porte/pin.
+\end{itemize}
+%Circuiti integrati (IC) end
+%Circuiti combinatori start
+\subsubsection{Circuiti combinatori}
+I circuiti combinatori sono quei circuiti logici con ingressi e uscite multiple in cui i valori di uscita sono determinati univocamente dai valori correnti degli ingressi. A differenza dei circuiti sequenziali, questi non contengono elementi di memoria e non dipendono da stati precedenti. Di seguito le principali tipologie di circuiti combinatori:
+\begin{itemize}
+    \item \textbf{Multiplexer (Selettori):} un multiplexer è un circuito che possiede $2^n$ ingressi dati, un'unica porta di uscita e n ingressi di controllo.
+    \begin{itemize}
+        \item \textbf{Funzionamento:} Gli ingressi di controllo codificano un numero binario che seleziona quale delle linee di ingresso deve essere "instradata" verso l'uscita. Ad esempio, in un multiplexer a otto ingressi, tre linee di controllo decidono quale porta AND abilitare per lasciar passare il segnale.
+        \item \textbf{Applicazioni pratiche:} è possibile realizzare qualsiasi funzione booleana a n variabili collegando gli ingressi del multiplexer a $V_{cc}$ (1 logico) o a terra (0 logico) in base ai valori della tabella di verità. Inoltre può essere usato per convertire dati da un formato parallelo a uno seriale, come avviene nelle tastiere dove la pressione di un tasto genera un codice che deve essere trasmesso bit dopo bit su un collegamento seriale.
+        \item \textbf{Demultiplexer:} è l'esatto opposto: instrada un unico segnale di ingresso verso una delle $2^n$ uscite in base al valore delle linee di controllo.
+    \end{itemize}
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/multiplexer_otto_input.jpg}
+    \caption{Un multiplexer a otto input}
+    \label{fig:multiplexer_otto_input}
+    \end{figure}
+    \item \textbf{Decoder (Decodificatore):} Un decodificatore è un circuito che riceve in ingresso un numero di n bit e attiva (imposta a 1) esattamente una delle sue $2^n$ linee di controllo.
+    \begin{itemize}
+        \item \textbf{Struttura:} ogni porta AND del decoder è abilitata da una combinazione unica di ingressi (diretti o invertiti).
+        \item \textbf{Esempio di utilizzo:} è fondamentale nella selezione dei chip di memoria. Se un sistema ha otto chip di memoria, i 3 bit di ordine superiore dell'indirizzo possono essere inviati a un decoder 3-8 per abilitare solo il chip corrispondente a quella specifica porzione di indirizzamento.
+    \end{itemize}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\linewidth]{images/decodificatore_3-8.jpg}
+        \caption{Un decodificatore da 3 a 8}
+        \label{fig:decodificatore_3-8}
+    \end{figure}
+    \item \textbf{Comparatori:} il comparatore è un circuito utilizzato per confrontare due parole (sequenze di bit). 
+    \begin{itemize}
+        \item \textbf{Meccanismo logico:} si basa sull'utilizzo di porte XOR (OR esclusivo). Poiché una porta XOR emette 0 se i due ingressi sono uguali e 1 se sono diversi, il circuito confronta i bit delle due parole a coppie.
+        \item \textbf{Risultato finale:} i segnali in uscita dalle porte XOR vengono inviati a una porta NOR finale. Se tutti i bit corrispondono (tutti gli XOR danno 0), la porta NOR emette 1, indicano che le due parole sono uguali; altrimenti emette 0.
+    \end{itemize}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\linewidth]{images/comparatore_4_bit.jpg}
+        \caption{Semplice comparatore a 4 bit}
+        \label{fig:comparatore_4_bit}
+    \end{figure}
+    \item \textbf{Array Logici Programmabili:} un chip molto generale che permette di calcolare somme di prodotti; un esempio è il seguente \ref{fig:esempio_PLA} che vede 12 ingressi che vengono invertiti per un totale di 24 segnali di input. Il cuore del circuito è costituito da una schiera di 50 porte AND che possono avere come input un qualsiasi sottoinsieme dei 24 segnali di input. 
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\linewidth]{images/esempio_PLA.jpg}
+        \caption{Array logico programmabile a 12 input e 6 output. I quadratini rappresentano i fusibili che possono essere bruciati per determinare la funzione da calcolare. I fusibili sono disposti in due matrici: quella superiore per le porte AND, quella inferiore per le porte OR}
+        \label{fig:esempio_PLA}
+    \end{figure}
+\end{itemize}
+%Circuiti combinatori end
+%Circuiti per l'aritmetica start
+\subsubsection{Circuiti per l'aritmetica}
+I circuiti combinatori specificamente progettati per eseguire operazioni matematiche e manipolazioni di bit all'interno del processore.
+\begin{itemize}
+    \item \textbf{Shifters (Registri a scorrimento):} il circuito shifter permette di spostare i bit di una parola verso destra o verso sinistra.
+    \begin{itemize}
+        \item \textbf{Struttura:} In un modello a 8 bit, il circuito accetta otto linee di input ($D_0,\dots,D_7$) e produce otto linee di output ($S_0,\dots,S_7$).
+        \item \textbf{Funzionamento:} Una linea di controllo (C) determina la direzione: se C=0 avviene uno spostamento a sinistra, se C=1 avviene uno spostamento a destra. Internamente, il circuito utilizza coppie di porte AND per abilitare il passaggio del bit verso la porta OR della posizione successiva o precedente.
+    \end{itemize}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.5\linewidth]{images/shifter.jpg}
+        \caption{Uno shifter a sinistra di 1 bit}
+        \label{fig:shifter}
+    \end{figure}
+    \item \textbf{Adder (sommatore):}La capacità di sommare interi è fondamentale per ogni CPU. Ci sono più livelli di complessità:
+    \begin{itemize}
+        \item \textbf{Half Adder (Semi-sommatore):} è il circuito più semplice; somma due bit e produce un output: la Somma e il Riporto (Carry). È limitato perché non può gestire un riporto proveniente da una posizione precedente, quindi è utile solo per i bit meno significativi.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.5\linewidth]{images/Semi-sommatore.jpg}
+            \caption{(a)Tabella delle verità della somma di 1 bit (b) Circuito di un semi-sommatore}
+            \label{fig:Semi-Sommatore}
+        \end{figure}
+        \item \textbf{Full Adder (Sommatore):} risolve il imite del semi-sommatore accettando tre ingressi: i due bit da sommare e il riporto in ingresso (Carry in). È costruito unendo due semi-sommatori e una porta OR.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.5\linewidth]{images/Sommatore.jpg}
+            \caption{(a) tabella di verità di un sommatore (b) Circuito di un sommatore}
+            \label{fig:Sommatore}
+        \end{figure}
+        \item \textbf{Ripple Carry Adder (Sommatore a propagazione di riporto):} si ottiene collegando in cascata più sommatori (Full Adder). Il riporto si propaga da destra verso sinistra. Il difetto principale è il ritardo: l'operazione non è completa finché il riporto non ha attraversato l'intero circuito, il che rallenta il sistema.
+        \item \textbf{Carry Select Adder (Sommatore a selezione del riporto):} è un'ottimizzazione per aumentare la velocità. Un sommatore a 32 bit viene diviso in due metà da 16 bit; la metà superiore viene duplicata in hardware. Una versione calcola il risultato assumendo che il riporto in ingresso sia 0, l'altra assumendo che sia 1. Quando la metà inferiore finisce il calcolo, la CPU seleziona istantaneamente il risultato corretto tra i due già pronti, dimezzando i tempi di attesa.
+    \end{itemize}
+    \item \textbf{Unità aritmetico logica (ALU):} L'ALU è l'unico circuito integrato capace di eseguire diverse funzioni logiche (AND, OR) e aritmetiche (somma) su due parole.
+    \begin{itemize}
+        \item \textbf{Struttura di un ALU a 1 bit:} Una ALU per parole a n bit è tipicamente costruita collegando in parallelo n circuiti identici chiamati bit slices. Ogni singola cella a 1 bit contiene: un'untità logica (per calcolare funzioni AND, OR e NOT); un'unità aritmetica (composta da due full-adder che gestiscono gli addendi e i segnali di riporto); un decoder a 2 bit (situato nell'algolo inferiore sinistro del circuito, riceve i segnali di controllo (F0, F1) per selezionare quale delle quattro operazioni deve essere inviata all'uscita finale)
+        \item \textbf{Segnali di controllo e funzioni:} una ALU standard è pilotata da 6 linee di controllo principali che permettono di manipolare gli input e l'operazione finale. \textbf{F0, F1} determinano la funzione selezionata dal decoder ($AND, OR, \overline{B}, A+B$).\newline
+        \textbf{ENA, ENB (Enable A/B)} permettono di abilitare individualmente gli ingressi A e B. Se negati, forzano l'ingresso relativo a zero.\newline 
+        \textbf{INVA (Invert A)} inverte l'ingresso sinitro (A)\newline
+        \textbf{INC (Increment)} forza un riporto nel bit meno significativo (Carry in), permettendo operazioni come A+1 o A+B+1.
+    \end{itemize}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\linewidth]{images/ALU-1-bit.jpg}
+        \caption{ALU a 1 bit}
+        \label{fig:ALU-1-bit}
+    \end{figure}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\linewidth]{images/ALU-8-bit.jpg}
+        \caption{8 ALU a 1 bit che formano un ALU a 1 bit. Per semplificare non sono mostrati segnali di abilitazione e segnali di inversione}
+        \label{fig:ALU-8-bit}
+    \end{figure}
+\end{itemize}
+%Circuiti per l'aritmetica end
+%Clock start
+\subsubsection{Clock}
+I circuiti digitali devono gestire la sincronizzazione e l'ordine degli eventi temporali, un aspetto critico per il funzionamento di qualsiasi computer.
+\begin{itemize}
+    \item \textbf{Definizione clock:} in questo conteso, un clock è un circuito che emette una serie di impulsi di larghezza definita e a intervalli temporali costanti.
+    \item \textbf{Ciclo di clock:} l'intervallo temporale compreso tra le estremità di due impulsi consecutivi è detto ciclo di clock.
+    \item \textbf{Frequenza e Precisione:} le frequenze tipiche variano oggi tra 100 MHz e 4 GHz (corrispondenti a cicli tra 10 nanosecondi e 250 picosecondi). Per garantire un'elevata precisione, la frequenza è solitamente controllata da un oscillatore a cristallo.
+\end{itemize}
+In un calcolatore possono verificarsi più eventi durante uno stesso ciclo di clock. Se però è necessario che si verifichino in uno specifico ordine occorre dividere il ciclo di clock in sottocicli. Una tecnica usata è la seguente:
+\begin{itemize}
+    \item \textbf{Segnali sfasati (Phase-shifting):} è possibile derivare un segnale secondario dalla linea principale inserendo un circuito con un ritardo noto. Questo genera un secondo segnale (C2) sfasato rispetto al primario (C1).
+    \item \textbf{Riferimenti temporali multipli:} utilizzando due segnali (C1 e C2), si ottengono quattro riferimenti temporali distinti in un unico ciclo: il fronte di salita di C1, il fronte di discesa di C1, il fronte di salita di C2 e il fronte di discesa di C2. Associando diversi eventi ai quattro fronti è possibile stabilire per loro una desiderata sequenza. Se, all'interno di ogni ciclo di clock, sono necessari più di quattro riferimenti temporali occorre collegare al clock principale altre linee secondarie e utilizzare circuiti con ritardi diversi. 
+    \item \textbf{Intervalli logici:} Se il circuito richiede intervalli di tempo invece di istanti discreti, si possono usare le combinazioni logiche degli stati alti dei clock (ad esempio, l'intervallo in cui C1 è alto AND C2 è alto) per distinguere fino a quattro sotto intervalli diversi.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\linewidth]{images/Clock.jpg}
+        \caption{(a) Clock (b) Diagramma di temporizzazione del clock. (c) Generazione di un clock asimmetrico}
+        \label{fig:Clock}
+    \end{figure}
+\end{itemize}
+%Clock end
+%Circuiti logici digitali elementali end
+%Memoria
+\subsection{Memoria}
+Una componente essenziale di ogni calcolatore è la memoria; se non ci fosse non potrebbe esistere nessun calcolatore, almeno nella forma in cui lo conosciamo. La memoria è utilizzata per conservare sia le istruzioni da eseguire sia i dati.
+%Latch start
+\subsubsection{Latch}
+Per creare una memoria da 1 bit, è necessario un circuito che possa ricordare i valori di ingresso passati. Questo si ottiene tramite un latch, la cui forma più semplice è l'SR latch.
+\begin{itemize}
+    \item \textbf{Struttura SR Latch (Set-Reset):} è costituito da due porte NOR collegate in modo incrociato, dove l'uscita di una porta è l'ingresso dell'altra.
+    \item \textbf{Ingressi e Uscite:} Possiede due ingressi, S (Set) per impostare lo stato e R (Reset) per azzerarlo, e due uscite complementari $Q$ e $\overline{Q}$
+    \item \textbf{Stati stabili:} Quando sia S che R sono a 0, il latch ha due stati stabili (0 e 1) e mantiene indefinitamente il valore precedentemente memorizzato
+    \item \textbf{Funzionamento:} portando momentaneamente S a 1, il latch passa allo stato $Q=1$, indipendentemente dallo stato precedente. Portando momentaneamente R a 1, il latch viene forzato allo stato $Q=0$.
+    \item \textbf{Indeterminatezza:} se sia S che R vengono impostati a 1 contemporaneamente, il circuito diventa non deterministico nel momento in cui entrambi tornano a 0, poiché lo stato finale dipenderà da quale dei due segnali scende per ultimo.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/SR_Latch.jpg}
+    \caption{(a) Latch di tipo NOR nello stato 0 (b) Latch di tipo NOR nello stato 1 (c) Tabella di verità del NOR}
+    \label{fig:SR_Latch}
+\end{figure}
+Per controllare con precisione il momento in cui il latch cambia stato, si aggiunge un terzo ingresso chiamato clock o (enable/strobe).
+\begin{itemize}
+    \item \textbf{Funzionamento:} Quando il segnale di clock è 0 (strobe), le uscite delle porte AND interne sono 0 e il latch mantiene il suo stato attuale indipendente da S e R.
+    \item \textbf{Abilitazione:} il latch diventa sensibile agli ingressi S e R solo quando il segnale di clock è 1 (enable).
+    \item \textbf{Non determinismo:} il circuito diventa non deterministico finché sia R che S non tornino ad assumere il valore 0. L'unico stato consistente per $S=R=1$ è quando $Q=\overline{Q}=0$; non appena entrambi gli input tornano al valore 0 il latch deve tuttavia passare istantaneamente in uno dei suoi due stati stabili. Se uno dei due input torna a 0 prima dell'altro, prevale quello che rimane al valore 1 più a lungo, dato che quando uno solo degli input vale 1 esso determina lo stato del latch. Se invece entrambi gli input ritornano a 0 nello stesso istante il latch passa in uno dei due stati stabili in modo del tutto casuale.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/SR_Latch_Temporizzato.jpg}
+    \caption{Latch SR temporizzato}
+    \label{fig:SR_Latch_Temporizzato}
+\end{figure}
+Per risolvere l'instabilità causata dalla condizione $S=R=1$ è con il Latch D temporizzato.
+\begin{itemize}
+    \item \textbf{Struttura:} Utilizza un unico ingresso dati, D. Poiché l'ingresso alla seconda porta è l'inverso del primo, non è fisicamente possibile che entrambi siano contemporaneamente 1.
+    \item \textbf{Capacità:} Quando il clock è a 1, il valore corrente di D viene campionato e memorizzato nel latch. Il valore memorizzato è sempre disponibile in uscita su Q. Quindi questo circuito è una \textbf{vera memoria a 1 bit}.
+    \item \textbf{Efficienza:} Sebbene il circuito base richieda 11 transistor, i design moderni più sofisticati possono memorizzare 1 bit con soli sei transistor.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/D_Latch_Temporizzato.jpg}
+    \caption{Latch D Temporizzato}
+    \label{fig:D_Latch_Temporizzato}
+\end{figure}
+\textbf{Analogia:} Un latch è come una porta con una serratura a scatto. L'ingresso Set è come spingere la porta per chiuderla: una volta chiusa, resta tale anche se smetti di spingere. L'ingresso Reset è come tirarla per aprirla. Il Clock agisce come una chiave: puoi spingere o tirare quanto vuoi, ma la porta cambierà posizione solo se la chiave è inserita e girata (clock a 1).
+%Latch end
+%Flip-Flops start
+\subsubsection{Flip-Flops}
+Un flip-flop è un dispositivo di memoria che campiona il valore presente su una linea in un istante particolare e lo memorizza. La differenza cruciale rispetto a un latch è la seguente:
+\begin{itemize}
+    \item \textbf{Latch:} è level-triggered, ovvero sensibile al livello del segnale (lo stato cambia finché il clock è 1).
+    \item \textbf{Flip-flop:} è edge-triggered, ovvero sensibile alla transizione (lo stato cambia solo durante il passaggio del segnale da uno stato all'altro).
+\end{itemize}
+Poiché il flip-flop reagisce solo ai cambiamenti, la durata dell'impulso di clock diventa irrilevante, purché le transizioni siano rapide. Esistono due varianti principali:
+\begin{itemize}
+    \item \textbf{Fronte di salita:} La transizione avviene quando il segnale passa da 0 a 1;
+    \item \textbf{Fronte di discesa:} La transizione avviene quando il segnale passa da 1 a 0.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/Generatore_Impulsi.jpg}
+    \caption{(a) Generatore d'impulsi. (b) Diagrammi temporali.}
+    \label{fig:Generatore_Impulsi}
+\end{figure}
+Un metodo comune per implementare un flip-flop consiste nel \textbf{generare un impulso} brevissimo in corrispondenza del fronte di salita del clock e inviarlo a un latch D. Questo impulso viene creato sfruttando il ritardo di propagazione ($\Delta$) dei circuiti:
+\begin{itemize}
+    \item Il segnale del clock viene inviato a una porta AND attraverso due strade: una diretta e una che passa per un Inverter.
+    \item L'inverter introduce un ritardo minimo (tipicamente pochi nanosecondi o picosecondi).
+    \item Per un brevissimo istante dopo che il clock è salito, entrambi gli ingressi della porta AND risultano alti (il segnale originale è già a 1, mentre quello invertito non è ancora diventato 0), generando un impulso di durata pari a $\Delta$.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/Flip-Flop_D.jpg}
+    \caption{Flip-Flop D}
+    \label{fig:Flip-Flop_D}
+\end{figure}
+Negli schemi logici, i flip-flop si distunguono dai latch per un simbolo a forma di triangolo posto sull'ingresso del clock (CK). Molti modelli includono anche ingressi supplementari per il controllo diretto:
+\begin{itemize}
+    \item \textbf{Set o Preset:} Forza lo stato del flip-flop a Q=1.
+    \item \textbf{Reset o Clear:} Forza lo stato a Q=0.
+\end{itemize}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/Flip-Flop_Latch.jpg}
+    \caption{Latch D (a,b) e Flip-Flop (c,d)}
+    \label{fig:Flip-Flop_Latch}
+\end{figure}
+\textbf{Analogia:} Immagina di voler catturare l'immagine di un corridore. Un latch è come una finestra aperta: finché la finestra resta aperta (livello alto), puoi vedere il corridore cambiare posizione. Un flip-flop è come una fotocamera con flash: non importa quanto a lungo tieni il dito sul pulsante, l'immagine viene catturata esattamente nell'istante in cui scatta il flash (il fronte del clock), "congelando" la realtà in quel preciso momento.
+%Flip-Flops end
+%Registri start
+\subsubsection{Registri}
+I flip-flop possono essere combinati in gruppi per creare registri, progettare per contenere tipi di dati con una lunghezza superiore a 1 bit, come parole da 8, 32, 64 bit. Mentre un singolo flip-flop memorizza solo uno 0 o un 1, un registro permette di immagazzinare un intero valore numerico o una stringa di bit.\newline
+Il funzionamento coordinato del registro è garantito dal segnale di clock:
+\begin{itemize}
+    \item \textbf{Caricamento simultaneo:} Per far si che tutti i bit del registro vengano caricati nello stesso istante, tutte le linee di clock dei singoli flip-flop che lo compongono sono collegate a un unico segnale di ingresso comune.
+    \item \textbf{Triggering:} Nel modello descritto, il caricamento avviene durante la transizione positiva (fronte di segnale) del segnale del clock.
+\end{itemize}
+Oltre al clock, i registri dispongono spesso di un segnale di \textbf{Clear} (CLR):
+\begin{itemize}
+    \item Tutte le linee di reset dei flip-flop sono collegate insieme (ganded)
+    \item Quando il segnale CLR viene portato a 0, tutti i flip-flop vengono forzati simultaneamente allo stato 0, permettendo di azzerare istantaneamente l'intero contenuto del registro.
+\end{itemize}
+Un aspetto critico nella progettazione dei registri riguarda la potenza del segnale:
+\begin{itemize}
+    \item Poiché un singolo segnale di input potrebbe non avere corrente sufficiente per pilotare contemporaneamente otto o più flip-flop, viene inserito un inverter sulla linea del clock in ingresso.
+    \item Questo inverter funge da \textbf{amplificatore}, garantendo che ogni componente del registro riceva un segnale pulito e forte per eseguire l'operazione richiesta.
+\end{itemize}
+I registri sono \textbf{strutture modulari}: un registro a 8 bit può essere utilizzato come blocco base per costruire registri più grandi. Ad esempio, è possibile creare un registro a 32 bit combinando due moduli da 16 bit e collegando tra loro i rispettivi segnali di clock e di reset.\newline
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/Registro_8_bit.jpg}
+    \caption{Registro a 8 bit costruito da singoli flip-flop}
+    \label{fig:Registro_8_bit}
+\end{figure}
+\textbf{Analogia:} Un registro è come una rastrelliera per biciclette con un unico lucchetto centrale. Ogni posto nella rastrelliera (il flip-flop) può contenere o meno una bici (un bit). Invece di dover chiudere ogni singolo lucchetto uno alla volta, il segnale di clock agisce come la leva centrale che blocca o sblocca tutti i posti contemporaneamente, assicurando che l'intera fila venga aggiornata nello stesso istante.
+%Registri end
+%Organizzazione della memoria start
+\subsubsection{Organizzazione della memoria}
+Per costruire memorie di grandi dimensioni, non è sufficiente raggruppare bit in semplici registri, ma è necessaria una struttura organizzata in cui le singole parole (word) siano indirizzabili individualmente. Questa organizzazione deve seguire uno schema regolare per permettere al sistema di essere facilmente esteso a capacità superiori e per ridurre il numero di collegamenti fisici necessari. Uno dei vantaggi principali di questo approccio è l'\textbf{ottimizzazione del numero di pin} sul chip: mentre un registro da 8 bit richiede circa 20 segnali, una memoria da 12 bit organizzata in parole ne richiede solo 13, poiché i bit possono condividere le linee di uscita tramite una logica di selezione.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/memoria_4x3.jpg}
+    \caption{Diagramma logico di una memoria 4 x 3. Ogni riga è una delle quattro parole a 3 bit. Lettura e scrittura riguardano sempre parole complete.}
+    \label{fig:memoria_4x3}
+\end{figure}
+La figura \ref{fig:memoria_4x3} illustra una memoria con quattro parole a 3 bit e anche se presenta una capacità totale (di 12 bit) decisamente maggiore rispetto a quella del flip-flop ottale visto precedentemente, richiede un numero inferiore di pin. Una caratteristica ancora più rilevante è che questa organizzazione è facilmente estendibile a memorie di dimensione maggiore.
+
+\begin{itemize}
+    \item \textbf{Interfacce di segnale:} La memoria dispone di tre linee di input dati ($I_0,I_1,I_2$), due linee di indirizzo ($A_0,A_1$) e tre segnali di controllo: \textbf{CS (Chip Select)} per abilitare il chip, \textbf{$RD (Read)$} per distinguere tra lettura e scrittura e \textbf{OE (Output Enable)} per gestire l'ingresso dei dati sul bus.
+    \item \textbf{Processo di indirizzamento:} All'interno del chip, un decodificatore converte i bit di indirizzo per attivare un'unica linea di selezione della parola alla volta. Solo la riga di flip-flop corrispondente all'indirizzo binario fornito risulterà operativa per l'azione richiesta.
+    \item \textbf{Operazione di Scrittura:} Quando CS è alto (valore 1) e PD è basso (valore 0), la linea di selezione abilita i gate che trasmettono il segnale di clock ai flip-flop della parola scelta, caricando i valori presenti sulle linee di input. Le altre parole non vengono modificate.
+    \item \textbf{Operazione di Lettura:} Quando CS e RD sono alti (valore 1), la linea di selezione abilita i gate AND collegati alle uscite Q dei flip-flop della parola selezionata. Questi dati fluiscono attraverso porte OR comuni che convergono verso le linee di uscita del chip.
+    \item \textbf{Buffer tri-state:} Per evitare conflitti elettrici quando le linee di ingresso e uscita condividono lo stesso bus, si utilizzano buffer non invertenti a tre stati (tri-state). Questi componenti agiscono come interruttori che possono emettere 0, 1 o uno stato di alta impedenza (circuito aperto). Il chip risulta elettricamente scollegato dal resto del sistema a meno che i segnali CS, RD e OE non siano tutti simultaneamente attivi.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\linewidth]{images/Buffer_invertenti_e_non.jpg}
+        \caption{(a) Buffer non invertente (b) Risultato di (a) quando il controllo è alto (c) Risultato di (a) quando il controllo è basso (c) Buffer invertente}
+        \label{fig:Buffer_invertenti_e_non}
+    \end{figure}
+\end{itemize}
+L'architettura descritta si dimostra estremamente \textbf{modulare e scalabile}: per aumentare il numero di bit per parola è sufficiente aggiungere colonne di flip-flop, mentre per aumentare il numero di parole si aggiungono nuove righe e si espande la logica del decodificatore aggiungendo linee di indirizzo. Un principio cardine di questa progettazione è che, per massimizzare l'efficienza della logica di indirizzamento, il numero di parole contenute in un modulo di memoria è sempre espresso come una potenza di 2.
+%Organizzazione della memoria 
+%Chip di memoria start
+\subsubsection{Chip di memoria}
+Poiché la tecnologia dei circuiti integrati è ideale per creare schemi bidimensionali ripetitivi, i chip di memoria rappresentano un'applicazione perfetta per questa tecnologia. 
+Con il miglioramento dei processi produttivi, il numero di bit che possono essere inseriti in un singolo chip aumenta costantemente, raddoppiando circa ogni 18 mesi seguendo la \textbf{Legge di Moore}. Tuttavia, i chip più grandi non rendono sempre obsoleti quelli piccoli a causa di diversi compromessi tra velocità, consumo energetico e prezzo.\newline
+Ad \textbf{esempio}, un chip di memoria da 4 Mbit ha due possibili organizzazioni:
+\begin{itemize}
+    \item \textbf{Organizzazione 512Kx8:} in questa configurazione, il chip richiede 19 linee di indirizzo per selezionare uno dei $2^{19}$ byte e 8 linee di dati per caricare o leggere il byte selezionato.
+    \item \textbf{Organizzazione 4096Kx1:} qui il chip è visto internamente come una matrice 2048x2048 di celle da 1 bit. Per ridurre il numero di pin necessari, viene utilizzato l'indirizzamento sequenziale: prima si seleziona una riga tramite l'impulso RAS (Row Address Strobe) e successivamente una colonna tramite CAS (Column Address Strobe).
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/organizzazioni_chip_4_Mbit.jpg}
+    \caption{Due modi di organizzare un chip di memoria a 4 Mbit.}
+    \label{fig:organizzazioni_chip_4_Mbit}
+\end{figure}
+Indipendentemente dall'organizzazione, il chip utilizza segnali specifici:
+\begin{itemize}
+    \item \textbf{CS (Chip Select):} Viene assertito per abilitare il chip specifico tra i molti presenti nel sistema.
+    \item \textbf{WE (Write Enable):} Indica se i dati devono essere scritti (1) o letti (0).
+    \item \textbf{OE (Output Enable):} Quando asserito, permette ai segnali di uscire dal chip; se negato, il chip viene scollegato elettricamente dal circuito (alta impedenza).
+\end{itemize}
+Un segnale è detto \textbf{asserito} (piuttosto che dire che assume valore alto o basso) per indicare che è impostato in modo da generare una qualche azione. Alcuni pin sono asseriti con valore alto, mentre altri con valore basso. I pin asseriti con valore basso sono identificati da una linea sopra il loro nome. L'opposto di asserito è negato. Se un pin è attivo basso (ovvero si attiva con tensione bassa), il suo nome è indicato con una barra sopra (es.$\overline{CS}$).\newline
+I chip di memoria di grandi dimensioni sono spesso costruiti come matrici di n x n indirizzate da numeri di riga e colonna. Questo tipo di architettura riduce il numero di pin necessari, ma rende allo stesso tempo più lento il chip, in quanto sono necessari due cicli di indirizzamento, uno per la riga e uno per la colonna. Per riguadagnare parte della velocità persa a causa dell'architettura, in alcuni chip è possibile specificare un indirizzo di riga seguito da una sequenza di indirizzi di colonna in modo da poter accedere a bit consecutivi all'interno di una stessa riga. \newline
+La scelta del design di un chip dipende da due fattori indipendenti: la \textbf{larghezza dell'output} (quanti bit vengono consegnati contemporaneamente, es. 1, 4, 8 o 16) e \textbf{la modalità di presentazione degli indirizzi} (tutti insieme o suddivisi in riga e colonna). Mentre i chip larghi 1 bit erano comuni in passato, l'aumento della dimensione delle parole di memoria (32 o 64 bit) ha reso più convenienti le famiglie di chip con larghezze di 4, 8 o 16 bit per evitare di dover collegare troppi chip in parallelo.
+%Chip di memoria end
+%RAM e ROM start
+\subsubsection{RAM e ROM}
+Le memorie che possono essere sia lette che scritte sono comunemente chiamate RAM (Random Access Memory), sebbene il termine sia tecnicamente improprio poiché quasi tutti i chip di memoria consentono l'accesso casuale. La distinzione principale avviene tra memorie volatili, che perdono i dati senza alimentazione, e memorie non volatili, che conservano le informazioni permanentemente.\newline
+Le memorie RAM si dividono in due categorie tecnologiche fondamentali:
+\begin{itemize}
+    \item \textbf{SRAM (Static RAM):} Sono costruite internamente con circuiti simili ai flip-flop D e mantengono i dati finché c'è alimentazione. Sono estremamente veloci (tempi di accesso nell'ordine dei nanosecondi) e per questo vengono utilizzate principalmente per le memorie cache.
+    \item \textbf{DRAM (Dynamic RAM):} Non usano flip-flop ma una matrice di celle composte da un solo transistor e un minuscolo condensatore. Poiché la carica elettrica tende a disperdersi, devono essere rinfrescate (refreshed) ogni pochi millisecondi. Nonostante siano più lente delle SRAM, la loro altissima densità le rende ideali per la memoria principale.
+    \item \textbf{SDRAM (Syncrhonous RAM):} Il più datato è il DRAM FPM (Fast Page Mode), ancora utilizzato nei calcolatori più vecchi. La DRAM FPM è stata sostituita dalla DRAM EDO (Extended Data Output) in cui un riferimento alla memoria può avere inizio ancor prima che sia completato il precedente. Sono pilotate dal clock di sistema eliminando i segnali di controllo, mentre le SDRAM DDR (Double Data Rate) raddoppiano la velocità trasferendo dati sia sul fronte di salita che su quello di discesa del clock.
+\end{itemize}
+In molte applicazioni il programma e alcuni dati devono rimanere memorizzati anche a macchina spenta.
+\begin{itemize}
+    \item \textbf{ROM (Read-Only Memory):} hanno dati inseriti in fabbrica e sono immutabili. Ciò avviene esponendo alla luce un materiale fotosensibile attraverso una maschera contenente il pattern di bit desiderato e incidendo la superficie esposta.
+    \item \textbf{PROM (Programmable ROM):} possono essere programmate una sola volta sul campo bruciando dei minuscoli fusibili interni: ciò viene fatto selezionando righe e colonne e applicando un'alta tensione a un particolare pin del chip. 
+    \item \textbf{EPROM (Erasable PROM):} i cui campi non solo possono essere programmati, ma anche cancellati tramite esposizione a luce ultravioletta (in questo modo tutti i bit assumono il valore 1). Generalmente hanno la stessa organizzazione delle RAM statiche.
+    \item \textbf{EEPROM (Electrically EPROM):} possono essere cancellate e riscritte elettricamente senza essere rimosse dal circuito (non possono essere più grandi di 1/64 delle comuni EPROM), pur essendo molto più lente e costose delle comuni DRAM.
+    \item \textbf{Memoria Flash:} è una variante delle EEPROM che permette la cancellazione e riscrittura a blocchi. Grazie alla sua velocità e non volatilità, sta progressivamente sostituendo i dischi meccanici sotto forma di SSD.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/vari_tipi_memoria.jpg}
+    \caption{Confronto tra vari tipi di memoria}
+    \label{fig:vari_tipi_memoria}
+\end{figure}
+%RAM e ROM end
+%Memoria
+%Chip della CPU e bus start
+\subsection{Chip della CPU e bus}
+Analizziamo come la CPU si interfaccia con la memoria e i dispositivi periferici, un processo strettamente legato al design dei bus utilizzati per la comunicazione.
+%Chip della CPU start
+\subsubsection{Chip della CPU}
+Tutte le moderne CPU sono contenute in un \textbf{unico chip}, il che rende la loro interazione con il resto del sistema estremamente definita e circoscritta. Ogni chip comunica con il mondo esterno esclusivamente attraverso un insieme di pin (contatti), che possono emettere segnali, riceverli o svolgere entrambe le funzioni.\newline
+I pin di un chip CPU possono essere classificati in tre tipologie fondamentali:
+\begin{itemize}
+    \item \textbf{Indirizzi (Address):} Questi pin emettono l'indirizzo della locazione di memoria che la CPU desidera leggere o scrivere. Un chip con m pin di indirizzo può indirizzare fino a $2^m$ locazioni di memoria.
+    \item \textbf{Dati (Data):} Questi pin sono usati per scambiare i dati effettivi tra la CPU e la memoria o i dispositivi di input/output (I/O).
+    Il numero di pin di dati (n) determina quanti bit possono essere letti o scritti in una singola operazione; un chip con 32 pin di dati è significativamente più veloce di uno con soli 8 pin, sebbene sia più costoso da produrre.
+    \item \textbf{Controllo (Control):} Questi pin regolano il flusso e la temporizzazione dei dati e gestiscono diverse funzioni ausiliarie.
+\end{itemize}
+Oltre a questi, tutti i chip dispongono di pin standard per l'alimentazione (solitamente tra +1,2 e +1,5 volt), la messa a terra (ground) e il segnale di clock (un'onda quadra a una frequenza definita).
+I pin di controllo, pur variando molto tra i diversi produttori, possono essere raggruppati in sei categorie principali:
+\begin{itemize}
+    \item \textbf{Controllo del bus:} Principalmente segnali in uscita che indicano alla memoria se la CPU desidera eseguire una lettura, una scrittura o altre operazioni.
+    \item \textbf{Interrupt (Interruzioni):} Segnali in entrata dai dispositivi di I/O che informano la CPU del completamento di un'operazione o della presenza di errori.
+    \item \textbf{Arbitraggio del bus:} Necessari per regolare il traffico sul bus, impedendo a due dispositivi (inclusa la CPU stessa) di tentare di usarlo contemporaneamente.
+    \item \textbf{Segnalazione del coprocessore:} Pin dedicati a facilitare la comunicazione tra la CPU e chip specializzati, come quelli per il calcolo in virgola mobile o la grafica.
+    \item \textbf{Stato (Status):} Forniscono o accettano informazioni sullo stato del sistema.
+    \item \textbf{Vari:} Pin utili per il debug, il reset del computer o per garantire la compatibilità con chip di I/O più vecchi.
+\end{itemize}
+Il processo tipico di esecuzione vede la CPU porre l'indirizzo sui pin di indirizzo, attivare le linee di controllo per informare la memoria della richiesta di lettura, e infine accettare il dato che la memoria deposita sui pin di dati.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/generica_CPU.jpg}
+    \caption{Una generica CPU. Le frecce indicano i segnali di input e di output. I trattini diagonali indicano pin multipli; per una specifica CPU un valore ne indica la quantità}
+    \label{fig:generica_CPU}
+\end{figure}
+%Chip della CPU end
+%Bus del calcolatore start
+\subsubsection{Bus del calcolatore}
+Un bus è un collegamento elettrico che unisce diversi dispositivi, ma possono essere anche interni alla CPU. Sono classificati in base alla loro funzione e ciascun tipo di bus soddisfa certi requisiti e gode di proprietà specifiche.\newline
+Mentre i primi personal computer utilizzavano un unico \textbf{bus di sistema} (system bus) composto da 50-100 fili paralleli incisi sulla scheda madre, i sistemi moderni sono più complessi. Oggi si preferisce utilizzare un bus di memoria dedicato per il traffico ad alta velocità tra CPU e RAM, e uno o più bus separati per le periferiche di I/O. Questa separazione evita che i dispositivi più lenti intasino la comunicazione critica tra processore e memoria.\newline
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/computer_bus_multipli.jpg}
+    \caption{Un sistema informatico con più bus}
+    \label{fig:computer_bus_multipli}
+\end{figure}
+Perché dispositivi di produttori diversi possano funzionare insieme, il bus deve seguire regole rigorose chiamate \textbf{protocollo del bus}. Queste regole includono:
+\begin{itemize}
+    \item \textbf{Specifiche meccaniche:} La forma dei connettori e delle schede per garantire l'inserimento fisico.
+    \item \textbf{Specifiche elettriche:} I livelli di tensione e i tempi necessari per i segnali. Inoltre, il bus dispone di diverse tipologie di linee: linee per gli indirizzi, linee per i dati e linee di controllo. Spesso non esiste una corrispondenza uno-a-uno tra i pin della CPU e le linee del bus; ad esempio, un decoder potrebbe essere necessario per convertire i segnali codificati di un chip in comandi specifici per il bus.
+\end{itemize}
+Esempi più famosi sono: il bus ISA, il bus EISA, il bus PCI, il bus SCSI, l'Universal Serial Bus.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/master_slave.jpg}
+    \caption{Esempio di bus master e slave}
+    \label{fig:master_slave}
+\end{figure}
+Un concetto fondamentale nella logica del bus è la distinzione tra dispositivi Master (attivi) e Slave (passivi).
+\begin{itemize}
+    \item \textbf{Master:} è il dispositivo che prende l'iniziativa e avvia il trasferimento (solitamente la CPU o un controller del disco durante le operazioni DMA)
+    \item \textbf{Slave:} è il dispositivo che attende le richieste e risponde ad esse. Le fonti sottolineano una regola ferrea: la memoria non può mai essere un master, ma agisce sempre e solo come slave.
+\end{itemize}
+Se i master trasmettono segnali deboli e sono collegati a molte periferiche, vengono connessi al bus mediante un chip chiamato \textbf{driver del bus}, che funge da amplificatore digitale; in modo analogo gli slave sono connessi al bus attraverso un ricevitore. Per le periferiche coprenti entrambi i ruoli si utilizza un chip chiamato \textbf{trasmettitore-ricevitore del bus}.\newline
+La progettazione di un bus deve bilanciare diversi fattori critici: la \textbf{larghezza} (numero di linee di indirizzo e dati), il \textbf{clocking} (sincrono o asincrono), l'\textbf{arbitraggio} (chi decide chi usa il bus quando più master lo richiedono) e le \textbf{operazioni} supportate (lettura, scrittura, trasferimenti a blocchi).
+%Bus del calcolatore end
+%Ampiezza del bus start
+\subsubsection{Ampiezza del bus}
+Nella progettazione dei bus maggiore è il numero di linee d'indirizzo di un bus, maggiore sarà la quantità di memoria che la CPU potrà indirizzare direttamente. .
+Il numero di linee di indirizzo determina la quantità massima di memoria che la CPU può indirizzare direttamente. Se un bus possiede n linee di indirizzo, la CPU può gestire fino a $2^n$ locazioni di memoria distinte.
+\begin{itemize}
+    \item \textbf{Compromesso costi-benefici:} L'aumento del numero di linee richiede più cavi fisici, occupa più spazio sulla scheda madre e necessita di connettori più grandi, aumentando il costo complessivo del sistema.
+\end{itemize}
+Con il tempo i produttori hanno cercato di migliorare il bus aumentando la larghezza di banda dei dati su un bus. Questo fu possibile con due tecniche: diminuendo il periodo di clock del bus (più trasferimenti al secondo) e aumentando la larghezza dei dati del bus.\newline
+Aumentare la velocità del bus (frequenza) è più difficile che aumentarne la larghezza a causa di due fattori principali:
+\begin{itemize}
+    \item \textbf{Disallineamento del bus:} È un fenomeno per cui i segnali su linee diverse viaggiano a velocità leggermente differenti. Maggiore è la velocità del bus, più grave diventa questo problema, portando a possibili errori di sincronizzazione.
+    \item \textbf{Retrocompatibilità:} Cambiare drasticamente la velocità del bus renderebbe inutilizzabili le vecchie schede progettate per standard più lenti, danneggiando sia i produttori che i consumatori. Per questo motivo, spesso si preferisce aggiungere più linee di dati piuttosto che aumentare la frequenza.
+\end{itemize}
+Per contenere i costi e lo spazio fisico senza rinunciare a un numero elevato di linee, alcuni progettisti optano per un bus multiplexato.
+\begin{itemize}
+    \item In questo design, le stesse linee vengono condivise per gli indirizzi e per i dati: all'inizio del ciclo del bus le linee portano l'indirizzo, e successivamente vengono utilizzate per il dato.
+    \item Sebbene questa scelta riduca il numero di pin necessari (e quindi il costo), rende il sistema più lento poiché i due tipi di informazioni non possono viaggiare contemporaneamente.
+\end{itemize}
+%Ampiezza del bus end
+%Temporizzazione del bus start
+\subsubsection{Temporizzazione del bus}
+I bus possono essere separati in due categorie in base alla loro temporizzazione.
+Un \textbf{bus sincrono} è governato da un oscillatore a cristallo che genera un'onda quadra a frequenza costante (solitamente tra 5 e 133 MHz). Il segnale del clock scandisce le varie transizioni dei segnali e il passaggio da un ciclo di bus al ciclo successivo. Tutte le operazioni sul bus richiedono un numero intero di questi cicli, detti \textbf{cicli di bus}.
+Quando la CPU vuole leggere dalla memoria:
+\begin{itemize}
+    \item la CPU, nel primo ciclo di clock, fornisce l’indirizzo della parola sulle linee di indirizzo;
+    \item dopo che le linee d'indirizzo si sono stabilizzate sui nuovi valori, vengono asserite $\overline{MREQ}$ (indica che si accede alla memoria) e $\overline{RD}$ (assertita per le letture e negato per le scritture)
+    \item se la memoria impiega tempo supplementare a rispondere asserisce $\overline{\text{WAIT}}$ per segnalare alla CPU di non aspettarla. Questa azione inserisce alcuni stati di attesa (cicli di bus addizionali) finché la memoria non completi l'operazione;
+    \item una volta che la memoria è pronta nega $\overline{\text{WAIT}}$  e mette i dati sulle linee apposite;
+    \item la CPU legge le linee dati, memorizzando il valore in un registro;
+    \item dovendo leggere i dati la CPU nega $\overline{MREQ}$ e $\overline{RD}$.
+\end{itemize}
+In ogni caso, master e slave devono rispettare dei vincoli temporali (es. rispetto ai fronti di salita e di discesa del clock).
+Ad esempio le specifiche di temporizzazione richiedono che i dati siano disponibili sulle linee prima che la CPU legga, per dare la possibilità alla linea di stabilizzarsi. Inoltre con le specifiche di temporizzazione è garantito che l'indirizzo venga impostato prima che  sia asserito.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/temporizzazione_lettura_bus_sincrono.jpg}
+    \caption{(a) Temporizzazione di una lettura di un bus sincrono. (b) Specifiche di alcuni tempi critici.}
+    \label{fig:temporizzazione_lettura_bus_sincrono}
+\end{figure}
+A differenza dei primi, i \textbf{bus asincroni} non utilizzano un clock centrale. La velocità di ogni transazione è determinata esclusivamente dalla velocità di risposta dei dispositivi coinvolti. Infatti, uno dei problemi del bus sincrono è proprio che qualsiasi operazione sul bus si svolge in tempi multipli del clock del bus.  La comunicazione avviene tramite una sequenza di causa-effetto basata su quattro eventi principali:
+\begin{itemize}
+    \item Il master asserisce $\overline{MSYN}$ (Master Synchronization) dopo aver impostato l'indirizzo.
+    \item Lo slave completa il lavoro e risponde asserendo $\overline{SSYN}$ (Slave Synchronization)
+    \item Il master preleva i dati e nega (disattiva) $\overline{MSYN}$
+    \item Lo slave, vedendo $\overline{MSYN}$ disattivato, nega a sua volta $\overline{SSYN}$, riportando il sistema allo stato originale.
+\end{itemize}
+Ogni evento è causato da un evento precedente e non da un impulso del clock. 
+Se una particolare coppia master-slave è lenta essa non influisce in alcun modo su una successiva coppia master-slave la cui velocità potrebbe essere molto più elevata.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/operazioni_bus_asincrono.jpg}
+    \caption{Operazioni di un bus asincrono}
+    \label{fig:operazioni_bus_asincrono}
+\end{figure}
+Nonostante la flessibilità e l'adattabilità tecnologica dei bus asincroni, la maggior parte dei bus reali è sincrona. La ragione principale è ingegneristica: i bus sincroni sono molto più facili da progettare, costruire e testare, poiché il comportamento del sistema è rigidamente prevedibile sulla base di intervalli di tempo fissi.
+%Temporizzazione del bus end
+%Arbitraggio del bus start
+\subsubsection{Arbitraggio del bus}
+Nel caso in cui due dispositivi vogliano accedere al bus, si può incorrere in un meccanismo di arbitraggio, che può essere centralizzato o decentralizzato.
+\begin{enumerate}
+    \item \textbf{Arbitraggio Centralizzato:} In questo schema, un singolo componente hardware, chiamato arbitro del bus, decide quale dispositivo può procedere. Il bus contiene un'unica linea di richiesta OR-cablata che in qualsiasi momento può essere asserita da uno o più dispositivi. L'arbitro non è in grado di capire quanti hanno fatto la richiesta, ma solo se ce n'è qualcuna o nessuna, quindi la concede asserendo la linea per la concessione del bus. 
+    \begin{itemize}
+        \item \textbf{Daisy Chaining (collegamento a festone):} È la forma più semplice. Tutti i dispositivi condividono una singola linea di richiesta bus (wired-OR). Quando l'arbitro riceve una richiesta, invia un \textbf{segnale di concessione (bus grant)}. Questa linea attraversa tutti i dispositivi in serie. Il primo dispositivo della catena che ha fatto richiesta intercetta il segnale e prende il controllo del bus; se non ha bisogno del bus, passa il segnale al vicino.
+        \item \textbf{Priorità Implicita:} Nel daisy chaining, la priorità è determinata dalla distanza fisica dall'arbitro: i dispositivi più vicini vincono sempre sui più lontani.
+        \item \textbf{Livelli di Priorità Multipli:} Per evitare che la priorità dipenda solo dalla posizione, molti bus utilizzano più livelli di priorità (4, 8, 16). Ogni livello ha le sue linee di richiesta e concessione. L'arbitro concede il bus al livello più alto; all'interno dello stesso livello, si usa il daisy chaining.
+        \item \textbf{Ottimizzazione dei cicli:} Alcuni sistemi usano una terza linea per segnalare che il bus è stato occupato, permettendo all'arbitro di negoziare la successiva concessione mentre il trasferimento attuale è ancora in corso.
+    \end{itemize}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\linewidth]{images/daisy_chain.jpg}
+        \caption{(a) Arbitro del bus centralizzato e a un livello che utilizza una daisy chaining (b)Stesso arbitro, ma a due livelli }
+        \label{fig:daisy_chain}
+    \end{figure}
+    \item \textbf{Arbitraggio Decentralizzato:} Questo approccio elimina la necessità di un arbitro centrale, riducendo i costi e il rischio di un "single point of failure" (arbitro centrale smette di funzionare, nessun dispositivo (inclusa la CPU) può più ottenere l'accesso al bus per comunicare, rendendo l'intero computer inutilizzabile).
+    \begin{itemize}
+        \item  \textbf{Monitoraggio delle linee:} Un metodo prevede che ogni dispositivo abbia una propria linea di richiesta prioritaria e monitori tutte le altre. Alla fine di ogni ciclo, ogni dispositivo sa se è il richiedente a priorità più alta e se può procedere.
+        \item \textbf{Schema a tre linee:} Un altro metodo usa solo tre linee: una di richiesta, una di "occupato" (BUSY) e una di arbitraggio collegata in daisy chain. Un dispositivo può diventare master solo se il bus è libero e il segnale di arbitraggio in ingresso è attivo. Se decide di prendere il bus, disattiva il segnale in uscita verso i vicini a valle, garantendo che solo un dispositivo diventi master.
+    \end{itemize}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\linewidth]{images/bus_arbitraggio_decentralizzato.jpg}
+        \caption{Arbitro del bus decentralizzato}
+        \label{fig:bus_arbitraggio_decentralizzato}
+    \end{figure}
+    Con un semplice ragionamento si deduce che fra i dispositivi che richiedono il bus lo ottiene quello che si trova più a sinistra.
+\end{enumerate}
+%Arbitraggio del bus end
+%Operazioni del bus start
+\subsubsection{Operazioni del bus}
+I bus non si limitino a semplici letture o scritture di singole parole, ma supportino operazioni più complesse per ottimizzare le prestazioni e gestire la comunicazione tra i componenti del sistema.\newline
+Mentre i cicli di bus standard gestiscono una parola alla volta, i trasferimenti a blocchi consentono di spostare intere sequenze di dati in modo molto più efficiente.
+\begin{itemize}
+    \item \textbf{Utilità:} Questa modalità è fondamentale per il caching, dove è necessario prelevare un'intera linea di cache (ad esempio 8 parole consecutive) in una sola volta.
+    \item \textbf{Meccanismo:} Durante il primo ciclo di clock ($T_1$), il bus master comunica allo slave il numero di parole da trasferire. Lo slave risponde restituendo una parola ad ogni ciclo successivo finché il contatore non si sia esaurito. 
+    \item \textbf{Efficienza:} Questo approccio, spesso chiamato modalità burst, riduce il numero di cicli necessari; ad esempio, una lettura di 4 parole può richiedere solo 6 cicli invece dei 12 o più necessari per quattro letture singole separate.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/trasferimento_a_blocchi.jpg}
+    \caption{Trasferimento di un blocco}
+    \label{fig:trasferimento_a_blocchi}
+\end{figure}
+Esistono anche altri tipi di cicli di bus. 
+\begin{itemize}
+    \item Ad esempio il ciclo di bus \textbf{leggi-modifica-scrivi} che consente a una qualsiasi CPU di leggere una parola dalla memoria, analizzarla e riscriverla in memoria, tutto senza rilasciare il bus. In un sistema con più CPU, questo tipo di ciclo evita che altre CPU che intendono utilizzare il bus riescano a impadronirsene interferendo con l'operazione della prima CPU.
+    \item Un altro importante ciclo di bus serve a gestire gli \textbf{interrupt}. Quando la CPU ordina a un dispositivo di I/O di effettuare qualche operazione si aspetta di solito un interrupt alla fine del lavoro; la segnalazione di questi interrupt richiede l'utilizzo del bus. Dato che più dispositivi potrebbero voler generare un interrupt simultaneamente, si verificano gli stessi tipi di problemi di arbitraggio visti nel caso dei cicli di bus ordinari.
+\end{itemize}
+La soluzione più usuale prevede di assegnare priorità ai dispositivi e di utilizzare un arbitro centralizzato per dare priorità al dispositivo per cui la temporizzazione è più critica. Esistono chip \textbf{controllori di interrupt} di tipo standard che sono utilizzati in modo molto diffuso, tra cui il chip Intel 8259A. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/controllore_8259A.jpg}
+    \caption{Utilizzo del controllore degli interrupt 8259A}
+    \label{fig:controllore_8259A}
+\end{figure}
+Il chip dispone di \textbf{otto ingressi di richiesta interruzione (IR0-IR7)} ai quali possono essere collegati direttamente altrettanti controller di I/O, come la tastiera, il timer di sistema, i dischi o la stampante. Quando una o più periferiche richiedono attenzione, l'8259A valuta le priorità e attiva la linea \textbf{INT (Interrupt)} collegata direttamente alla CPU.\newline
+L'interazione tra l'8259A e la CPU segue una sequenza precisa:
+\begin{enumerate}
+    \item \textbf{Segnalazione:} L'8259A riceve una richiesta su una linea IRx e asserisce il pin INT della CPU.
+    \item \textbf{Riconoscimento:} Se la CPU è pronta a gestire l'interruzione, invia un impulso di risposta sul pin INTA (Interrupt Acknowledge).
+    \item  \textbf{Identificazione (Vettore):} Ricevuto l'impulso INTA, l'8259A deposita sul bus dati un numero chiamato \textbf{vettore di interruzione}.
+    \item \textbf{Esecuzione:} La CPU utilizza questo numero come indice in una tabella (tabella dei vettori di interruzione) per trovare l'indirizzo della procedura di servizio (ISR) da eseguire per quella specifica periferica.
+\end{enumerate}
+Il chip è altamente flessibile grazie a diversi registri interni che la CPU può leggere o scrivere utilizzando cicli di bus standard (tramite i pin $\overline{RD}, \overline{WR}, \overline{CS} \text{ e } \overline{A0}$). Attraverso questi registri, il software può:
+\begin{itemize}
+    \item \textbf{Mascherare le interruzioni:} Ignorare selettivamente alcuni segnali IRx
+    \item \textbf{Impostare le modalità:} Definire come gestire le priorità (ad esempio, priorità fissa o rotativa).
+    \item \textbf{Reset:} Inviare un codice speciale al termine della gestione di un'interruzione per segnalare al controller che è pronto per la successiva.
+\end{itemize}
+%Operazioni del bus end
+%Chip della CPU e bus end
+%Esempi di CPU start
+\subsection{Esempi di CPU}
+%Pentium 4 start
+\subsubsection{Pentium 4}
+Il Pentium 4 ha segnato il passaggio dalla vecchia microarchitettura P6 (usata nei Pentium Pro, II e III) alla nuova NetBurst.
+\begin{itemize}
+    \item \textbf{Pipeline Profonda:} Progettata per raggiungere frequenze di clock molto elevate, NetBurst utilizza una pipeline molto lunga che permette di suddividere il lavoro in piccoli passi atomici.
+    \item \textbf{ALU a Doppia Velocità:} Il chip contiene due ALU (Unità Aritmetico-Logiche) che funzionano al doppio della frequenza nominale del clock. Ad esempio, in un processore a 3 GHz, le ALU operano a 6 GHz, permettendo di eseguire fino a 12 miliardi di operazioni su interi al secondo.
+    \item \textbf{Hyperthreading:} Introdotto nella versione a 3,06 GHz, permette alla CPU di gestire due thread di controllo in parallelo. L'hardware duplica alcune risorse (come il Program Counter e la mappa dei registri) per dare l'illusione al sistema operativo di avere due CPU fisiche, migliorando le prestazioni del 25\% con un aumento della superficie del chip di solo il 5\%.
+\end{itemize}
+Il sistema di caching del Pentium 4 è stato ottimizzato per alimentare costantemente la sua pipeline profonda:
+\begin{itemize}
+    \item \textbf{L1 Trace Cache:} A differenza delle cache tradizionali che memorizzano byte grezzi, la cache L1 (8 KB) del Pentium 4 è una "cache delle tracce" che memorizza fino a 12.000 micro-operazioni già decodificate. Questo evita di dover decodificare ripetutamente la stessa istruzione ISA complessa.
+    \item \textbf{L2 e L3 Cache:} La cache di secondo livello (da 256 KB a 1 MB) è unificata e di tipo write-back. Versioni speciali come la Extreme Edition includono una cache L3 da 2 MB.
+    \item \textbf{Bus Dati e Indirizzi:} Sebbene sia una macchina a 32 bit per il software, l'hardware comunica con la memoria con unità di 64 bit. Il bus indirizzi a 36 bit permette di indirizzare fino a 64 GB di RAM.
+\end{itemize}
+Le transazioni sul bus di memoria sono altamente strutturate e organizzate a pipeline, divise in 6 fasi indipendenti:
+\begin{enumerate}
+    \item \textbf{Arbitraggio:} Determina quale master prende il controllo.
+    \item \textbf{Richiesta:} Emissione dell'indirizzo e dei comandi.
+    \item \textbf{Segnalazione Errore:} Notifica di eventuali errori di parità.
+    \item \textbf{Snoop:} Fondamentale nei sistemi multiprocessore per garantire la coerenza della cache.
+    \item \textbf{Risposta:} Conferma della disponibilità dei dati.
+    \item \textbf{Dati:} Trasferimento effettivo.
+\end{enumerate}
+Il Pentium 4 è stato il chip che ha evidenziato i limiti della dissipazione del calore:
+\begin{itemize}
+    \item \textbf{Transistor:} Le versioni sono passate da 42 milioni (0,18 micron) a 55 milioni di transistor (0,09 micron).
+    \item \textbf{Calore:} A 3,6 GHz, il chip consuma circa 115 watt, riscaldandosi quanto una lampadina da 100 watt. Questa emissione termica ha portato alla cancellazione della versione a 4 GHz nel 2004, poiché gli ingegneri non riuscivano a dissipare il calore in modo efficiente per i desktop.
+    \item \textbf{Thermal Throttling:} Se i sensori interni rilevano una temperatura di 130°C, la CPU riduce automaticamente le prestazioni per raffreddarsi e prevenire danni fisici.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/pentium_4.jpg}
+    \caption{Disposizione logica dei contatti del Pentium 4. I nomi interamente in maiuscolo sono i nomi ufficiali di Intel per i singoli segnali; gli altri sono nomi di gruppi di segnali o descrizioni dei segnali}
+    \label{fig:pentium_4}
+\end{figure}
+%Pentium 4 end
+%Intel Core i7 start
+\subsubsection{Intel Core i7}
+Ecco un approfondimento dettagliato basato sui vari aspetti del chip:
+\begin{itemize}
+    \item \textbf{Complessità e Produzione:} Il Core i7 (versione Sandy Bridge) è composto da circa 1,16 miliardi di transistor realizzati con un processo a 32 nanometri. Può raggiungere frequenze di clock fino a 3,5 GHz.
+    \item \textbf{Parallelismo:} È una macchina superscalare a 4 livelli, capace di emettere ed eseguire fino a quattro istruzioni per ciclo di clock.
+    \item \textbf{Multi-core e Hyperthreading:} Il chip contiene più core indipendenti (solitamente da 2 a 6 per i modelli desktop). Supporta l'hyperthreading (o multithreading simultaneo), che permette di gestire due thread hardware per ogni core, aiutando a nascondere le latenze (come i cache miss) alternando velocemente l'esecuzione.
+\end{itemize}
+Il sistema di cache è strutturato su tre livelli per massimizzare il throughput dei dati:
+\begin{itemize}
+    \item \textbf{L1 (Livello 1)}: Ogni core ha la propria cache divisa: 32 KB per le istruzioni e 32 KB per i dati.
+    \item \textbf{L2 (Livello 2):} Ogni core ha una cache unificata (istruzioni + dati) da 256 KB.
+    \item \textbf{L3 (Livello 3):} È una cache unificata condivisa tra tutti i core, con dimensioni che variano da 4 a 15 MB (fino a 20 MB in alcuni modelli).
+\end{itemize}
+\textbf{Coerenza (Snooping):} Per garantire che tutti i core vedano dati aggiornati, ogni CPU esegue lo snooping ("ficcanaso") sul bus di memoria: se un core tenta di leggere un dato che un altro core ha modificato nella propria cache privata, quest'ultimo interviene fornendo il dato corretto prima della RAM.\newline
+Il Core i7 integra internamente molte funzioni che un tempo risiedevano sulla scheda madre:
+\begin{itemize}
+    \item \textbf{Memoria DDR3:} Supporta due canali DDR3 indipendenti a 666 MHz (1333 milioni di transazioni/sec). Poiché l'interfaccia è a 64 bit, i due canali insieme forniscono una larghezza di banda fino a 20 GB/s.
+    \item \textbf{PCI Express (PCIe):} Dispone di un'interfaccia a 16 linee (x16) integrata per collegare direttamente le periferiche (come schede video) con una banda di 16 GB/s.
+    \item \textbf{QPI (Quick Path Interconnect):} Utilizzato nelle versioni high-end per connettere più processori fisici tra loro, gestendo richieste di coerenza della cache e interruzioni interprocessore.
+    \item DMI (Direct Media Interface): Collega la CPU al chipset (modelli P67 e ICH10) a una velocità di circa 2.5 GB/s.
+\end{itemize}
+Gestione Termica ed Energetica:
+\begin{itemize}
+    \item \textbf{Consumo:} Il processore consuma tra 17 e 150 watt.
+    \item \textbf{Thermal Throttling:} Se i sensori interni rilevano una temperatura di 130°C, la CPU attiva il "throttling", ovvero esegue le istruzioni solo ogni N cicli di clock per raffreddarsi rapidamente ed evitare danni fisici.
+    \item \textbf{Stati di Sospensione:} Sono previsti cinque stati, dall'attività piena al "deep sleep", in cui le cache vengono spente e i valori dei registri preservati per risparmiare energia.
+\end{itemize}
+Per evitare che la CPU rimanga senza dati, il bus DDR3 opera in modo pipelined, gestendo fino a quattro transazioni simultanee. Ogni richiesta segue tre fasi:
+\begin{itemize}
+    \item ACTIVATE: Apre una riga della memoria DRAM per prepararla a successivi accessi;
+    \item READ/WRITE: Accesso effettivo ai dati (anche in modalità burst, accessi multipli).
+    \item PRECHARGE: Chiude la riga per prepararla alla successiva operazione.
+\end{itemize}
+Il Core i7 è definito come una CPU multicore, il che significa che un singolo stampo di silicio (die) contiene fisicamente più processori indipendenti (core), solitamente da 2 a 6.
+\begin{itemize}
+    \item \textbf{Vantaggio:} Sfruttando thread e lock, i programmatori possono ottenere incrementi di velocità significativi facendo lavorare i diversi core in parallelo su compiti distinti.
+    \item \textbf{Costi e Limiti:} Inserire due CPU complete su un unico chip raddoppia quasi l'area del silicio se ognuna ha le proprie cache, raddoppiando di fatto i costi di produzione. Inoltre, non tutte le applicazioni desktop hanno abbastanza parallelismo intrinseco da giustificare l'uso di due CPU complete.
+\end{itemize}
+Oltre a essere multicore, ogni singola CPU all'interno del Core i7 è dotata di hyperthreading
+\begin{itemize}
+    \item \textbf{Funzionamento:} Questa tecnologia permette a più thread hardware di essere attivi contemporaneamente sullo stesso core. Per il sistema operativo, un chip hyperthreaded appare come un processore duale (o multiplo) che condivide la stessa cache e memoria principale.
+    \item \textbf{Gestione delle Latenze:} L'obiettivo principale è tollerare latenze molto brevi, come i cache miss, effettuando uno switch immediato tra i thread hardware. Al contrario, il multithreading basato sul software richiede centinaia di cicli per gestire lo scambio di contesto.
+    \item \textbf{Efficienza:} Intel ha rilevato che un aumento di appena il 5\% dell'area del chip per supportare l'hyperthreading può portare a un incremento delle prestazioni del 25\% in molte applicazioni.
+\end{itemize}
+Poiché i due thread condividono l'hardware dello stesso core, il sistema NetBurst (e successivamente Sandy Bridge) adotta diverse strategie:
+\begin{itemize}
+    \item \textbf{Duplicazione:} Alcune risorse sono replicate per ogni thread, come il Program Counter, la tabella di mappatura dei registri e il controllore delle interruzioni.
+    \item \textbf{Ripartizione (Partitioning):} Le code interne alla pipeline sono divise rigidamente: metà degli slot sono riservati al thread 1 e metà al thread 2, garantendo che un thread non "soffochi" l'altro.
+    \item \textbf{Condivisione Dinamica (Soglia):} Risorse come lo scheduler sono condivise dinamicamente ma con una soglia massima di utilizzo per evitare che un thread monopolizzi tutto il core.
+\end{itemize}
+%Intel Core i7 end
+%UltraSPARC III start
+\subsubsection{UltraSPARC III}
+L'UltraSPARC III rappresenta l'implementazione di Sun Microsystems dell'architettura RISC a 64 bit (conforme allo standard SPARC Version 9). A differenza dei processori desktop come il Pentium 4, questa CPU è stata concepita specificamente per alimentare server multiprocessore di grandi dimensioni con memoria condivisa.
+Ecco un approfondimento dettagliato sulle sue caratteristiche hardware e architetturali:
+\begin{enumerate}
+    \item \textbf{Architettura e Parallelismo:}
+    \begin{itemize}
+        \item \textbf{Design RISC Puro:} L'UltraSPARC III non necessita di complessi traduttori da istruzioni CISC a micro-operazioni; le sue istruzioni native sono già semplici e regolari.
+        \item \textbf{Pipeline Profonda:} Dispone di 6 pipeline interne specializzate: due per gli interi (a 14 stadi), due per la virgola mobile, una per le operazioni di load/store e una per la gestione dei salti.
+        \item \textbf{Emissione Multipla:} È in grado di lanciare quattro istruzioni per ciclo di clock, garantendo prestazioni elevate nonostante una frequenza di clock nominale inferiore rispetto ai concorrenti Intel.
+        \item \textbf{Istruzioni VIS 2.0:} Include il Visual Instruction Set per accelerare grafica 3D, compressione dati e decodifica video (MPEG) in tempo reale.
+    \end{itemize}
+    \item \textbf{Caratteristiche Fisiche e Produzione:}
+    \begin{itemize}
+        \item \textbf{Evoluzione Tecnologica:} I primi modelli operavano a 600 MHz (tecnologia a 0,18 micron e alluminio) con 29 milioni di transistor. Le versioni successive hanno raggiunto 1,2 GHz utilizzando collegamenti in rame a 0,13 micron.
+        \item \textbf{Packaging:} Si presenta come un Land Grid Array (LGA) con 1368 contatti (pin) disposti in una matrice 37x37.
+    \end{itemize}
+    \item \textbf{Gerarchia della Memoria e Caching:}
+    \begin{itemize}
+        \item \textbf{Cache di Primo Livello (L1):} Integrata nel chip, divisa in 32 KB per le istruzioni e 64 KB per i dati.
+        \item \textbf{Cache di Secondo Livello (L2):} A differenza del Pentium 4, la cache L2 dell'UltraSPARC III è esterna al chip (SRAM commerciali). Questa scelta offre flessibilità (dimensioni da 1 a 8 MB), ma richiede un bus molto largo (256 bit) per trasferire un intero blocco di cache da 32 byte in un unico ciclo.
+        \item \textbf{Cache Specializzate:} Integra una cache di prefetch (2 KB) per anticipare i dati necessari e una cache di scrittura (2 KB) per ottimizzare i trasferimenti verso la L2.
+    \end{itemize}
+    \item \textbf{Gestione del Bus e del Multiprocessing:}
+    \begin{itemize}
+        \item \textbf{Addressing:} Il bus indirizzi a 43 bit permette di gestire teoricamente fino a 8 Terabyte (TB) di memoria centrale.
+        \item \textbf{Banda Passante:} Il bus dati è largo 128 bit e opera a 150 MHz, fornendo una larghezza di banda di 2,4 GB/s.
+        \item \textbf{Interfaccia UPA:} Utilizza l'architettura Ultra Port Architecture (UPA), che può essere implementata come bus o commutatore, per connettere più CPU UltraSPARC alle memorie.
+        \item \textbf{Chip UDB II:} Include l'UltraSPARC Data Buffer II, un componente che funge da memoria tampone tra la CPU e il sistema di memoria, permettendo ai due elementi di funzionare in modo asincrono e migliorando la gestione dei codici a correzione d'errore (ECC).
+    \end{itemize}
+\end{enumerate}
+%UltraSPARC III end
+%Chip 8051 start
+\subsubsection{Chip 8051}
+L'Intel 8051 è un microcontrollore a 8 bit introdotto nel 1980, diventato uno standard "di fatto" e un pilastro nel settore dei sistemi integrati (embedded) grazie alla sua longevità e versatilità.\newline
+\textbf{Contesto Storico e Successo di Mercato}\newline
+La storia dell'8051 inizia nel 1976, quando Intel rilasciò l'8748 per soddisfare i costruttori che desideravano integrare CPU, memoria e I/O in un unico chip, riducendo i costi rispetto al precedente Intel 8080 che richiedeva componenti separati. Nonostante sia un'architettura di vecchia data, l'8051 è ancora oggi più venduto dei moderni processori Pentium, con volumi che superano gli 8 miliardi di unità all'anno. Il segreto del suo successo risiede nel prezzo estremamente basso (pochi centesimi di euro), nella vasta disponibilità di software, librerie e compilatori, e nella presenza di numerosi produttori che lo realizzano sotto licenza, garantendo velocità da 12 a 100 MHz.\newline
+\textbf{Architettura Hardware e Segnali}\newline
+Il chip originale contiene circa 60.000 transistor e dispone di caratteristiche ottimizzate per il controllo di dispositivi fisici:
+\begin{itemize}
+    \item \textbf{Memoria interna:} Integra 4 KB di ROM (o 8 KB nell'8052) per il programma e 128 byte di RAM (o 256 byte nell'8052) per i dati.
+    \item \textbf{I/O Versatile:} La caratteristica distintiva è la presenza di 32 linee di I/O organizzate in quattro porte da 8 bit, che permettono di collegare direttamente interruttori, LED o sensori.
+    \item \textbf{Gestione della Memoria Esterna:} Se la memoria interna è insufficiente, il chip può indirizzare fino a 64 KB di memoria esterna per il codice e altrettanti per i dati tramite 16 linee di indirizzo e 8 linee di dati.
+    \item \textbf{Multiplexing:} Per ridurre il numero di pin, le 8 linee di indirizzo meno significative condividono gli stessi contatti fisici con le linee dei dati; il segnale ALE (Address Latch Enable) indica alla memoria quando l'indirizzo sul bus è valido.
+\end{itemize}
+\textbf{Caratteristiche Uniche del Livello ISA}\newline
+L'architettura dell'insieme d'istruzioni (ISA) dell'8051 presenta soluzioni ingegnose per massimizzare l'efficienza in spazi ridotti:
+\begin{itemize}
+\item \textbf{Indirizzabilità a livello di bit:} Esiste un'area speciale di 16 byte (indirizzi 32-47) in cui ogni singolo bit può essere manipolato individualmente tramite istruzioni booleane, evitando le costose operazioni di mascheramento richieste da altri processori.
+\item \textbf{Finestre di Registri:} Dispone di quattro insiemi di otto registri (R0-R7); durante un'interruzione, il sistema può semplicemente cambiare l'insieme attivo invece di salvare i registri, garantendo una risposta estremamente rapida ai segnali in tempo reale.
+\item \textbf{Architettura Harvard:} Mantiene spazi di indirizzamento separati per programma e dati, utilizzando il segnale PSEN (Program Store Enable) per leggere le istruzioni.
+\end{itemize}
+\textbf{Ciclo di Esecuzione e Temporizzazione}\newline
+L'8051 è un processore sincrono dove la maggior parte delle istruzioni richiede un solo ciclo di clock, diviso internamente in sei stati: prelievo (fetch) dalla ROM, decodifica, preparazione degli operandi, caricamento dei latch TMP1 e TMP2, esecuzione della ALU e scrittura del risultato finale.
+%Chip 8051 end
+%Esempi di CPU end
+%Esempi di BUS start
+\subsection{Esempi di BUS}
+% Il Bus ISA (Industry Standard Architecture) start
+\subsubsection{Il Bus ISA (Industry Standard Architecture)}
+Il bus ISA rappresenta il retaggio del mondo PC originale.
+\begin{itemize}
+    \item \textbf{Origini:} Introdotto con l'IBM PC (basato su Intel 8088), era un bus semplice a 8 bit che operava a 4,77 MHz. 
+    \item \textbf{Evoluzione:} Con l'avvento del PC/AT (Intel 80286), fu esteso a 16 bit aggiungendo un secondo connettore sulla scheda madre per mantenere la retrocompatibilità con le vecchie schede.
+    \item \textbf{Limiti:} Operava a un massimo di 8,33 MHz con una larghezza di banda di soli 16,7 MB/s, diventando presto un collo di bottiglia per le applicazioni grafiche.
+    \item \textbf{Stato attuale:} Sebbene sia stato esteso a 32 bit (EISA), è oggi considerato obsoleto e relegato ai musei del computer.
+\end{itemize}
+% Il Bus ISA (Industry Standard Architecture) end
+%Il Bus PCI (Peripheral Component Interconnect) start
+\subsubsection{Il Bus PCI (Peripheral Component Interconnect)}
+Progettato da Intel nel 1990, il PCI è nato per gestire la crescente richiesta di banda dei video a pieno schermo e in movimento.
+\begin{itemize}
+    \item \textbf{Caratteristiche tecniche:} Inizialmente trasferiva 32 bit per ciclo a 33 MHz (133 MB/s); le versioni successive sono arrivate a 66 MHz e 64 bit, raggiungendo i 528 MB/s.
+    \item \textbf{Funzionamento:} È un bus sincrono che utilizza il multiplexing (indirizzi e dati condividono gli stessi pin in cicli diversi) per ridurre il numero di contatti fisici.
+    \item \textbf{Arbitraggio:} Utilizza un arbitro centrale che gestisce le richieste (REQ\#) e le concessioni (GNT\#) per ogni dispositivo.
+    \item Adozione: Intel ha reso i brevetti di pubblico dominio, rendendolo lo standard di fatto per quasi tutti i computer dalla generazione Pentium in poi.
+\end{itemize}
+%Il Bus PCI (Peripheral Component Interconnect) end
+%PCI Express (PCIe) start
+\subsubsection{PCI Express (PCIe)}
+Nonostante il nome, il PCI Express non è un bus nel senso tradizionale, ma una rete point-to-point a commutazione di pacchetto.
+\begin{itemize}
+    \item \textbf{Architettura a "Lane":} Al posto di un bus parallelo largo, utilizza collegamenti seriali ad alta velocità chiamati lane (corsie). Una singola lane PCIe 1.0 supporta 2,5 Gbps.
+    \item \textbf{Scalabilità:} È possibile combinare più lane (x1, x8, x16, x32); uno slot x16 in versione 3.0 può raggiungere una banda di 16 GB/s.
+    \item \textbf{Protocollo a strati:} Utilizza una pila di protocolli (Fisico, Trasmissione, Transazione, Software) simile a quella delle reti locali come Ethernet.
+    \item \textbf{Vantaggi:} Le connessioni seriali eliminano i problemi di disallineamento dei segnali (skew) tipici dei bus paralleli e permettono connettori molto più piccoli.
+\end{itemize}
+%PCI Express (PCIe) end
+%USB (Universal Serial Bus) start
+\subsubsection{USB (Universal Serial Bus)}
+L'USB è stato creato da un consorzio di aziende per collegare periferiche a bassa velocità senza dover aprire il case del PC o riavviare il sistema.
+\begin{itemize}
+    \item \textbf{Topologia:} Il sistema è organizzato ad albero, con una radice (root hub) interna al PC che può gestire fino a 127 dispositivi.
+    \item \textbf{Trasferimento dati:} L'hub principale invia un frame ogni 1,00 ms per mantenere sincronizzati tutti i dispositivi.
+    \item \textbf{Versioni e velocità:} Si è evoluto da 1,5 Mbps (v1.0) e 12 Mbps (v1.1) fino ai 480 Mbps (v2.0) e ai 5 Gbps dello standard 3.0.
+    \item \textbf{Versatilità:} Supporta diversi tipi di traffico: isocrono (per audio/video in tempo reale), bulk (grandi trasferimenti non urgenti), interrupt (input lenti come tastiere) e controllo.
+\end{itemize}
+%USB (Universal Serial Bus) end
+%Esempi di BUS end
+%Interfacce start
+\subsection{Interfacce}
+Le interfacce di I/O rappresentano l'ultimo tassello fondamentale per permettere al computer di comunicare con il mondo esterno attraverso le cosiddette porte di I/O. Tra le interfacce più comuni si trovano i chip UART, USART, i controllori di dischi e le interfacce parallele o PIO (Parallel Input/Output).
+%Le Interfacce I/O: Il caso del chip PIO start
+\subsubsection{Le Interfacce I/O: Il caso del chip PIO}
+Un esempio tipico di interfaccia programmabile è l'Intel 8255A, un chip dotato di 24 linee di I/O che possono interfacciarsi con quasi ogni dispositivo logico digitale, come tastiere, interruttori, luci o stampanti.
+\begin{itemize}
+    \item \textbf{Struttura interna:} Il chip è organizzato in tre porte indipendenti da 8 bit (A, B e C).
+    \item \textbf{Programmabilità:} Attraverso un registro di controllo interno, la CPU può configurare ogni porta per funzionare come ingresso (bit 0) o come uscita (bit 1).
+    \item \textbf{Connettività:} Il chip dispone di otto linee collegate direttamente al bus dati, una linea di Chip Select (CS), linee di lettura (RD) e scrittura (WR), una linea di reset e due linee di indirizzo (A0-A1) usate per selezionare uno dei quattro registri interni.
+\end{itemize}
+%Le Interfacce I/O: Il caso del chip PIO end
+%La Decodifica dell'Indirizzo start
+\subsubsection{La Decodifica dell'Indirizzo}
+La decodifica dell'indirizzo è il meccanismo che determina come e quando il segnale di Chip Select (CS) viene asserito per attivare un determinato chip di memoria o di I/O. Esistono due filosofie principali per gestire queste interfacce:
+\begin{enumerate}
+    \item \textbf{I/O Standard:} Il dispositivo viene selezionato tramite una linea di bus esplicita che indica un riferimento a un dispositivo di I/O e non alla memoria.
+    \item \textbf{I/O Mappato in Memoria:} Al dispositivo vengono assegnati alcuni byte dello spazio di indirizzamento della memoria (ad esempio, 4 byte per i registri di un chip PIO).
+\end{enumerate}
+Tecniche di Decodifica:
+\begin{itemize}
+    \item \textbf{Decodifica Completa:} Utilizza porte logiche (come porte OR o NAND a più ingressi) collegate alle linee d'indirizzo per garantire che il chip risponda a un unico indirizzo specifico. Ad esempio, per selezionare un chip solo quando i bit A11-A15 sono tutti zero, si può usare una porta NOR a cinque ingressi.
+    \item \textbf{Decodifica Parziale:} Per semplificare il circuito, si possono usare solo i bit più significativi (es. solo A15) per pilotare il Chip Select. Sebbene sia economica (richiede meno chip logici), questa tecnica causa il fenomeno per cui lo stesso dispositivo risponde a molteplici indirizzi diversi (alias), limitando la futura espandibilità del sistema.
+    \item \textbf{Uso di Decodificatori:} Un'altra tecnica prevede l'impiego di chip decodificatori (come i decoder 3-a-8), che accettano n bit in ingresso e attivano una sola delle $2^n$ linee di uscita, permettendo di selezionare agevolmente uno tra diversi chip di RAM o I/O.
+\end{itemize}
+%La Decodifica dell'Indirizzo
+%Interfacce end
+% Livello Logico Digitale end

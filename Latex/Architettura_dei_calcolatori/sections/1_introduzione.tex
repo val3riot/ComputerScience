@@ -1,0 +1,173 @@
+%Introduzione start
+\section{Introduzione}
+%Approccio Strutturare start
+\subsection{Approccio Strutturale}
+Un programma è una sequenza di istruzioni che descrive come portare a termine un dato compito.\newline
+Per poter eseguire un programma, bisogna poter comunicare ai componenti elettronici del computer delle istruzioni. Il linguaggio macchina è l'insieme delle operazioni dette primitive, che solitamente sono:
+\begin{itemize}
+    \item sommare due numeri;
+    \item controllare se un numero vale zero;
+    \item copiare una porzione di dati da una parte all'altra della memoria.
+\end{itemize}
+Progettare un calcolatore implica dover scegliere le operazioni elementari, ma nel corso del tempo si è passati a un approccio più strutturale nel concepire l'architettura dei computer. Per far ciò bisogna riuscir a tradurre gli input voluti dagli utenti in istruzioni comprensibili dal computer (obiettivo del corso).
+%Linguaggi, livelli e macchine virtuali start
+\subsubsection{Linguaggi, livelli e macchine virtuali}
+Una tecnica per risolvere il problema posto è la tecnica della \textbf{traduzione}:
+consideriamo un programma scritto in un linguaggio L1, e un linguaggio L0 comprensibile dal computer; per eseguire il programma scritto in L1 possiamo sostituire ogni istruzione di L1 con una equivalente in L0. In questo modo il programma sarà composto solo da istruzioni L0 e potrà essere eseguito sul computer.\newline
+Un'altra tecnica consiste nello scrivere un programma (detto interprete) in L0 che accetta come dati d'ingresso programmi in L1; il programma esaminerà tutti i dati in input traducendoli in linguaggio L0. Questa tecnica non prevede un nuovo programma L0, ed è detta \textbf{interpretazione}.\newline
+La traduzione converte in una fase iniziale il programma scritto in L1 in L0 e lo carica in memoria, così facendo il programma scritto in L1 non è più necessario. L'interpretazione esamina e decodifica ogni riga del programma scritto in L1 eseguendola direttamente. Entrambi i metodi sono utilizzati.\newline
+Un altro modo di vederla è immaginare l'esistenza di una macchina virtuale, diciamo M1, il cui linguaggio macchina sia L1. In questo modo l'utente può eseguire programmi in L1 direttamente sul computer. L'idea è man mano definire linguaggi più pratici rispetto al precedente fino a che non se ne ottenga uno adeguato. Ciascun linguaggio usa quello precedente come base, in questo modo il computer può essere visto come una serie di livelli.
+\textbf{METTERE IMMAGINE}
+%Linguaggi, livelli e macchine virtuali end
+%Attuali macchine multilivello start
+\subsubsection{Attuali macchine multilivello}
+La maggior parte dei computer moderni consiste in due o più livelli. \textbf{METTERE IMMAGINE}
+\begin{itemize}
+    \item \textbf{Livello 0, livello dei dispositivi:} i progettisti hanno a che fare con i singoli transistor; i componenti elettronici che possono essere modellati come dispositivi digitali sono i \textbf{gate}. Ciascun gate è costituito da una manciata di transistor ed è dotato di uno o più input digitali e calcola in output una semplice funzione dei valori d'ingresso (AND, OR, ...). Combinando più gate è possibile creare delle memorie di 1 bit, 0 o 1; combinando più memorie ad 1 bit è possibile creare dei \textbf{registri} ad esempio a 16, 32 o 64 bit. Ciascun registro può contenere un numero il cui valore può variare fino a un certo limite.
+    \item \textbf{Livello 1, livello di micro-architettura:} è presente una memoria locale formata da un gruppo di registri (generalmente a 8 o 32 bit) e un circuito chiamato ALU (\textbf{Arithmetic Logic Unit}) capace di effettuare semplici operazioni aritmetiche. I registri formano un percorso dati che permettono lo spostamento dei dati in modo tale da avere uno o due registri che vengono usati dalla ALU per effettuare operazioni che vengono infine memorizzate su un altro registro. In alcune macchine le operazioni del percorso dati vengono controllate da un programma, \textbf{microprogramma}, mentre su altre viene controllato direttamente dal HW. Il microprogramma è un interprete per le istruzioni del livello 2, che usa il percorso dati per prelevare, esaminare ed eseguire un'istruzione alla volta.
+    \item \textbf{Livello 2, livello ISA (Instruction Set Architecture Level):} i produttori quando rilasciano manuali sulle istruzioni della macchina, presentano le istruzioni eseguite in modo interpretato dal microprogramma o dai circuiti.
+    \item \textbf{Livello 3, livello macchina del sistema operativo:} presenta oltre alle istruzioni del livello 2, nuove istruzioni, una diversa organizzazione della memoria e la capacità di eseguire programmi in modo concorrente. I nuovi servizi aggiunti nel livello 3 sono realizzati/eseguiti da un interprete eseguito al livello 2 chiamato \textbf{sistema operativo}. Le operazioni in condivisione col livello 2 sono eseguite direttamente dal microprogramma.
+    \item \textbf{Livello 4, livello del linguaggio assemblativo:} i primi tre livelli sono progettati per eseguire interpreti e traduttori scritti da dei programmatori di sistema (persone), specializzati nella progettazione e nell'implementazione di nuove macchine virtuali. I livelli 4 o superiori sono pensati per programmatori che devono risolvere problemi applicativi. Mentre i primi 3 livelli sono interpretati, solitamente i livelli 4 e 5 usano traduttori. I programmi in \textbf{linguaggio assemblativo} sono inizialmente tradotti nei linguaggi dei livelli 1, 2 e 3 e successivamente interpretati dalla macchina virtuale o reale. Il programma che esegue la traduzione è chiamato \textbf{assemblatore}.
+    \item \textbf{Livello 5, linguaggi ad alto livello:} sono i linguaggi ad alto livello definiti per essere utilizzati dai programmatori di applicazione. Alcuni linguaggi sono tradotti al livello 3 o 4 da un programma detto \textbf{compilatore}; altri sono interpretati.
+\end{itemize}
+L'insieme dei tipi di dati, delle operazioni e delle funzionalità di ciascun livello sono chiamate \textbf{architettura}.
+%Attuali macchine multilivello end
+%Evoluzione delle machhine multilivello start
+\subsubsection{Evoluzione delle macchine multilivello}
+Hardware(circuiti integrati, cavi, memorie, trasformatori, ...) e software(algoritmi o istruzioni) sono logicamente equivalenti:
+\begin{itemize}
+    \item Qualsiasi operazione eseguita dal software può essere svolta direttamente dall'hardware;
+    \item Ogni istruzione eseguita dall'hardware può essere simulata dal software.
+\end{itemize}
+%Invenzione della microprogrammazione start
+\subsubsection{Invenzione della microprogrammazione}
+I primi computer digitali, risalendo agli anni 40, avevano solamente due livelli: livello \textbf{ISA} in cui erano realizzati tutti i programmi, e il \textbf{livello logico digitale}, che li eseguiva.
+%Invenzione della microprogrammazione end
+%Invenzione del sistema operativo start
+\subsubsection{Invenzione del sistema operativo}
+Nel 1960 fu progettato un computer con un software, sempre attivo, in grado di gestire l'hw, detto sistema operativo.
+%Invenzione del sistema operativo end
+%Migrazione delle funzionalità verso il microcodice start
+\subsubsection{Migrazione delle funzionalità verso il microcodice}
+A partire dal 1970 i progettisti cominciarono ad arricchire microcodice con nuove istruzioni più efficienti(esempio INC è più veloce di ADD).
+%Migrazione delle funzionalità verso il microcodice end
+%Eliminazione della microprogrammazione start
+\subsubsection{Eliminazione della microprogrammazione}
+Verso gli anni '70 i microprogrammi diventarono sempre più grandi e lenti, si pensò allora di eliminare questa tecnica utilizzando solo microcodice eseguito direttamente dall'hw. I moderni processori si affidano alla microprogrammazione.
+%Eliminazione della microprogrammazione end
+%Evoluzione delle machhine multilivello end
+%Pietre miliari nell'architettura dei computer start
+\subsection{Pietre miliari nell'architettura dei computer}
+Un breve riassunto dei vari elaboratori costruiti negli anni.
+%Generazione 0 - Computer meccanici 1942-1945 start
+\subsubsection{Generazione 0 - Computer meccanici 1942-1945}
+Le principali macchine sono:
+\begin{itemize}
+    \item Macchina di Pascal, in grado di eseguire somme e sottrazioni;
+    \item Macchina di Leibniz in grado di eseguire anche moltiplicazioni e divisioni;
+    \item Macchina differenziale (Different engine) di Babbage in grado di eseguire somme e sottrazioni che incideva i risultati mediante una punta d'acciaio su una lastra di rame.
+    \item Macchina analitica di Babbage composta da quattro componenti: una memoria, un unità computazionale, un dispositivo di input e di output mediante schede perforanti.
+    \item Macchina di Atanasoff basata sull'aritmetica binaria e usava dei condensatori per la memoria che dovevano essere aggiornati periodicamente per non far perdere la carica secondo un processo chiamato jogging the memory (stesso principio delle DRAM).
+\end{itemize}
+Con Aiken che realizzà il Mark I che usava nastri perforati per input/output e il successivo mark II finì l'era dei relé e iniziò l'era dell'elettronica.
+%Generazione 0 - Computer meccanici 1942-1945 end
+%Generazione 1 - Valvole termoioniche 1945-1955 start
+\subsubsection{Generazione 1 - Valvole termoioniche 1945-1955}
+\begin{itemize}
+    \item COLOSSUM sviluppata da Alan Turing dutante la seconda guerra mondiale, usata per decifrare i messaggi del dispositivo ENIGMA.
+    \item ENIAC(Electronic Numerical Integrator And Computer) macchina che aveva registri decimali in grado di mantenere fino a un massimo numero di cifre decimali. Presentata in una scuola estiva dai creatori che ispirò molte altre macchine: ILLIAC, MANIAC, EDSAC, EDVAC, ...
+    \item IAS(Institute for Advanced Study), creata da Neumann basandosi sull'architettura della EDVAC e delle altre macchine del tempo, costituita da 5 componenti fondamentali: memoria, ALU, unità di controllo (CU) e dispositivi di input/output. Il cervello della macchina era costituito dalla CU e dall'ALU, negli attuali computer appartengono ad un unico chip chiamato CPU(Central Processing Unit).
+    L'ALU esegue operazioni aritmentiche e logiche attraverso un registro a 40 bit chiamato accumulatore. La CU dirige le operazioni.
+    In genere queste macchine avevano in comune questa architettura detta macchina di Von Neumann: la CPU è composta da CU, LU e Accumulatore, memoria interna della CPU utilizzata per ocntenere gli operandi delle istruzioni eseguite dalla ALU; INPUT/OUTPUT costrituiscono l'interfacciamento del calcolatore verso l'esterno; Memoria che conserva sia il programma che i dati su cui deve lavorare il programma; bus di cominicazione è il canale che permentte la comunicazione tra tutte le precedenti unità.
+\end{itemize}
+Successivamente IBM inizia a ritagliarsi uno spazio nel commercio di macchine e schede perforate.
+%Generazione 1 - Valvole termoioniche 1945-1955 end
+%Generazione 2 - Transistor 1955-1965 start
+\subsubsection{Generazione 2 - Transistor 1955-1965}
+Il transistoe è stato inventato da Bardeen nel 1948.
+\begin{itemize}
+    \item TX-0(Transistorez eXperimental computer 0): ideato come dispositivo di test, evoluto nel TX-2. Non videro commercio.
+    \item PDP-1: molto simile al TX-0, poteva eseguire 200.000 istruzioni al secondo.
+    \item PDP-8: aveva un unico bus, chiamato omnibus, ovvero un insieme di cavi paralleli utilizzati per connettere i diversi componenti di un computer.
+    \item IBM 7094: possedeva una memoria centrale di 25.536 parole da 36 bit.
+    \item 1401 era una macchina in grado di leggere e scrivere nastri magnetici, leggere e perforare schede e stampare output.
+    \item CDC 6600: la CPU era altamente parallela, dotata di unità che potevano lavorare parallelamente.
+    Al suo interno aveva un certo numero di piccoli computer che lo aiutavano a gestire tutti i dettagli dei programmi e dell'input/output mentre la CPU macinava numeri.
+\end{itemize}
+%Generazione 2 - Transistor 1955-1965 end
+%Generazione 3 - Circuiti integrati 1955-1980 start
+\subsubsection{Generazione 3 - Circuiti integrati 1955-1980} 
+I circuiti integrati consistono in decine di transistor su un singolo chip. In questo modo si potevano avere computer più piccoli e allo stesso tempo più potenti. Nota di merito alla serie IBM 360 che introdusse la multiprogrammazione, grazie alla quale si potevano avere più programmi in memoria allo stesso tempo. Inoltre fu la prima serie di macchine in grado di emulare altri computer.
+%Generazione 3 - Circuiti integrati 1955-1980 end
+%Generazione 4 - Integrazione a grandissima scala 1980-?? start
+\subsubsection{Generazione 4 - Integrazione a grandissima scala 1980-??}
+Con la tecnologia VLSI(Very Large Scale Integration si riescono a stampare milioni di transistor su un singolo chip (IBM PC, Apple Lisa, Intel 8080/8088/80386). Numerose aziende progettarono cloni di PC, mentre Apple introdusse il primo computer dotato di GUI.
+%Generazione 4 - Integrazione a grandissima scala 1980-?? end
+%Generazione 5 - Computer a basso consumo e computer invisibili start
+\subsubsection{Generazione 5 - Computer a basso consumo e computer invisibili}
+Computer invisibili che sono integrati in elettrodomesstici, orologi, ecc..
+%Generazione 5 - Computer a basso consumo e computer invisibili end
+%Pietre miliari nell'architettura dei computer end
+%Tipologie di computer start
+\subsection{Tipologie di computer}
+Una veloce paronamica delle varie tipologie di computer:
+\begin{itemize}
+    \item Computer usa e getta: chip come RFID(Radio Frequency Identificator) usati in oggetti, solitamente a basso costo, che vengono usati poche volte (esempio: cartoline melodiche).
+    \item Microcontrollori: computer che sono integrati in apparecchiature che non sono vendute come elaboratori (Frigoriferi, televisioni, giocattoli, armi).
+    \item Dispositivi mobili e da gioco: Computer con speciali capacità grafiche e sonore, non espandibili e non programmabili dall'utente (PS5, XBOX, ...)
+    \item Personal Computer: un ampia gamma di macchine destinate all'informatica individuale (laptop, desktop, ...)
+    \item Server: spesso sono versioni potenziate dei PC come server di rete destinati a usi aziendali e non.Esistono configurazioni dotate di mono o multiprocessore, dotate di centinaia di GB di memoria ad alta velocità.
+    \item Raggruppamento di Workstation: normali PC connessi tra di loro mediante reti la cui velocità è nell'ordine dei GB al secondo. Eseguono software speciale che permette loro di lavorare in modo congiunto su uno stesso problema, spesso di tipo scientifico o ingegneristico.
+    \item Mainframe: Sono computer con molte CPU ed alte capacità elaborative, affidabilità, sicurezza e costo. Hanno maggiore potenza di calcolo rispetto ai server e superiori capacità di I/O. Utilizzati da enti governativi e grandi aziende. Gli attuali MF ereditano le caratteristiche del primo MF ovvero IBM System/360.
+\end{itemize}
+%Tipologie di computer end
+%Esempi di famiglie di computer start
+\newpage
+\subsection{Esempi di famiglie di computer}
+Ci sono tre principali tipologie di architettura: ARM(spesso usata sui dispositivi mobile), AVR(diffusa nei microcontrollori economici) e x86(usata su pc e server). 
+%Introduzione all'architettura x86 start
+\subsubsection{Introduzione all'architettura x86}
+Nel 1968 fu fondata la Intel Corporation e da allora iniziarono a creare microprocessori su un solo chip. Il primo di essi fu il 4004, si noti la tabella che riassume le varie evoluzioni dei chip intel \ref{fig:chip_intel_evolution}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/Chip_Intel_Evolution.png}
+    \caption{Evoluzione delle CPU intel}
+    \label{fig:chip_intel_evolution}
+\end{figure}
+Con il processore 80486 venne introdotta la memoria cache di 8KB usata per conservare le parole di memoria utilizzate con più frequenza.\newline
+Successivamente con il Pentium vennero introdotte l'insieme di istruzioni speciali MMX (MultiMedia eXtension) molto utili per velocizzare i calcoli per l'elaborazione di audio e video. Successivamente nei Pentium pro venne introdotta una cache a due livelli, una usata per le istruzioni più utilizzate e una per i dati. Un ulteriore aggiunta nei Pentium III furono le istruzioni SSE (Streaming SIMD Extrensions) per migliorare le prestazioni con la grafica 3D. Nel 2006 intel cambiò il marchio Pentium con i Core e introdusse il chip a due core: Core 2 Duo. Un'altra linea di chip introdotta da intel erano i Celeron, un marchio più economico e i Xeon usati per i server vista la cache più grande e un miglior supporto multiprocessore.\newline
+Notare come la legge di Moore associata al numero di bit di memoria, risulti valida anche per i chip della CPU \ref{fig:legge_moore_cpu_intel}.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/legge_moore_intel.png}
+    \caption{Legge di Moore per i chip della CPU intel}
+    \label{fig:legge_moore_cpu_intel}
+\end{figure}
+Usare transistor più piccoli permette di raggiungere frequenze più alte, ma allo stesso tempo richiede una tensione più elevata.
+%Introduzione all'architettura x86 end
+%Introduzione all'architettura ARM start
+\subsubsection{Introduzione all'architettura ARM}
+La società Acorn Computer sviluppò il primo computer con una CPU ARM. Successivamente dei processori ARM vennero implementati anche da Nintendo nel game boy advance e più recentemente nei smartphone e tablet. Nvidia creò un SoC Tegra 2 che ha due CPU ARM Cortex A9 implementata in alcune sue schede video.
+%Introduzione all'architettura ARM end
+%Introduzione all'architettura AVR start
+\subsubsection{Introduzione all'architettura AVR}
+Si tratta di un'architettura utilizzata nei sistemi integrati di fascia bassa. Nel 1996 nacque la CPU RISC a 8-bit chiamata AVR acquistata successivamente da Atmel. Ci sono tre classi di microcontrollori: 
+\begin{itemize}
+    \item TinyAVR: molto piccolo, i suoi pin devono assolvere un doppio compito; possono essere riprogrammati in fase di esecuzione per una qualsiasi delle funzioni digitali o analogiche supportate dal microcontrollore.
+    \item MegaAVR: si trova nel sistema open-source Arduino, è dotato anche di supporto per l'I/O seriale, di orologi interni e di uscite analogiche programmabili.
+    \item AVR XMEGA: incorpora un acceleratore per operazioni di crittografia e il supporto integrato per interfacce USB.
+\end{itemize}
+%Introduzione all'architettura AVR end
+%Esempi di famiglie di computer end
+%Unità metriche start
+\subsection{Unità metriche}
+Quando si fa riferimento ai dati si utilizza la base 2 poiché lo spazio di indirizzamento è sempre una potenza di due. Quindi 1 kB di memorica contiene $2^16$=1024 Byte. Guardare lo schema per tutti i prefissi \ref{fig:unita_metriche}.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/unita_metriche.png}
+    \caption{Unità metriche}
+    \label{fig:unita_metriche}
+\end{figure}
+%Unità metriche end
+%Approccio Strutturare end
+%Introduzione end
