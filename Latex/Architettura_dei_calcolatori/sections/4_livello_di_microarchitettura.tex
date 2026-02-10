@@ -84,6 +84,9 @@ Per gestire le operazioni del percorso dati, sono necessari 29 segnali di contro
     \item \textbf{2 segnali per MAR/MDR:} Indicano operazioni di lettura o scrittura della memoria tramite questi registri.
     \item \textbf{2 segnali per MAR/MDR:} Indica il prelievo (fetch) di un byte dalla memoria verso il registro MBR.
 \end{itemize}
+Mentre è possibile scrivere il risultato del bus C in più registri contemporaneamente, non è mai desiderabile abilitare più di un registro sul bus B (potrebbe causare danni fisici all'hardware). Per questo motivo, l'architettura Mic-1 non dedica 9 bit separati alla selezione del bus B, ma codifica l'informazione in 4 bit.
+Un decodificatore 4-a-16 bit riceve questi 4 bit e attiva una sola delle linee di controllo dei registri sorgente. Questa scelta riduce il numero di bit totali della microistruzione senza perdere funzionalità.
+
 %Microistruzioni end
 %Esempio di microarchitetture end
 %Livello di microarchitettura end
