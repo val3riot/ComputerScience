@@ -11,7 +11,7 @@ eval "$(conda shell.bash hook)"
 conda activate $ENV_NAME
 
 echo "=== Installazione pacchetti Base, Jupyter e Machine Learning ==="
-conda install numpy pandas matplotlib seaborn scikit-learn scipy jupyter notebook ipykernel -y
+conda install numpy pandas matplotlib seaborn scikit-learn scipy jupyter notebook ipykernel nltk -y
 
 echo "=== Installazione completata! ==="
 echo "Per iniziare usa: conda activate $ENV_NAME"
